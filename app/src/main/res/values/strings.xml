@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">FitLog</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_add_exercises">AddExercises</string>
+    <string name="reps">Reps</string>
+    <string name="weight">Weight</string>
+    <string name="daysInput">Enter number of days</string>
+
+    <string-array name="muscleGroups">
+        <item>Back</item>
+        <item>Chest</item>
+        <item>Legs</item>
+        <item>Biceps</item>
+        <item>Triceps</item>
+        <item>Shoulders</item>
+    </string-array>
+
+    <string-array name="back">
+        <item>Close Grip Lat Pulldown</item>
+        <item>Wide Grip Lat Pulldown</item>
+        <item>Seated Row</item>
+        <item>Barbell Row</item>
+        <item>Dumbell Row</item>
+        <item>T-Bar Row</item>
+        <item>Deadlift</item>
+        <item>Pull-up</item>
+    </string-array>
+
+    <string-array name="chest">
+        <item>Flat Bench Press</item>
+        <item>Incline Bench Press</item>
+        <item>Decline Bench Press</item>
+        <item>Flat Dumbell Press</item>
+        <item>Incline Dumbell Press</item>
+        <item>Decline Dumbell Press</item>
+        <item>Flat Cable Fly</item>
+        <item>Incline Cable Fly</item>
+        <item>Decline Cable Fly</item>
+        <item>Pec Machine</item>
+        <item>Flat Bench Machine</item>
+        <item>Incline Machine</item>
+        <item>Push-up</item>
+    </string-array>
+
+    <string-array name="legs">
+        <item>Back Squat</item>
+        <item>Front Squat</item>
+        <item>Leg Press</item>
+        <item>Leg Extension</item>
+        <item>Hamstring Curl</item>
+        <item>Calf Machine</item>
+    </string-array>
+
+    <string-array name="biceps">
+        <item>Dumbell Hammer Curl</item>
+        <item>Dumbell Preacher Curl</item>
+        <item>EZ-Bar Preacher Curl</item>
+        <item>Rope Curl</item>
+        <item>Barbell Curl</item>
+        <item>Machine Preacher Curl</item>
+    </string-array>
+
+    <string-array name="triceps">
+        <item>Close Grip Pushdown</item>
+        <item>Rope Pushdown</item>
+        <item>Overhead Rope Raise</item>
+        <item>Overhead Dumbell Raise</item>
+        <item>Dips Machine</item>
+        <item>Dips Bodyweight</item>
+        <item>Dumbell Skull Crusher</item>
+        <item>EZ-Bar Skull Crusher</item>
+    </string-array>
+
+    <string-array name="shoulders">
+        <item>Overhead Dumbell Press</item>
+        <item>Overhead Barbell Press</item>
+        <item>Overhead Machine Press</item>
+        <item>Dumbell Lateral Raises</item>
+        <item>Machine Lateral Raises</item>
+        <item>Rear Delt Cable Pull</item>
+        <item>Rear Delt Machine</item>
+        <item>Hex Bar Shrugs</item>
+        <item>Dumbell Shrugs</item>
+    </string-array>
+</resources>

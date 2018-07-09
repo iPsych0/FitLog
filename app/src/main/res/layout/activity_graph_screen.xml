@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_graph_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.daniel.fitlog.GraphScreen">
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="wrap_content"
+        android:layout_height="350dip"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/graph"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/graphTitle"
+        android:textColor="#990a1d"
+        android:textStyle="normal|bold"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/daysInput"
+        android:hint="@string/daysInput"
+        android:textAlignment="center"
+        android:textColor="#990a1d"
+        android:inputType="number" />
+
+    <Button
+        android:text="Show results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/graphTitle"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/resultButton"
+        android:background="#990a1d"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="8dp" />
+
+</RelativeLayout>

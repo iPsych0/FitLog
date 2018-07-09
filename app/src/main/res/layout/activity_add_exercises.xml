@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_exercises"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.daniel.fitlog.AddExercises">
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:id="@+id/muscleGroups"
+        android:spinnerMode="dropdown" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/muscleGroups"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:id="@+id/exercises"
+        android:spinnerMode="dropdown" />
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:hint="@string/weight"
+        android:ems="10"
+        android:id="@+id/weight"
+        android:inputType="number"
+        android:layout_width="100dp"
+        android:layout_alignBaseline="@+id/reps"
+        android:layout_alignBottom="@+id/reps"
+        android:layout_toRightOf="@+id/dateButton"
+        android:layout_toEndOf="@+id/dateButton"
+        android:textAlignment="center" />
+
+    <Button
+        android:text="SELECT DATE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateButton"
+        android:layout_below="@+id/exercises"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#990a1d"
+        android:textColor="@android:color/white" />
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:hint="@string/reps"
+        android:ems="10"
+        android:id="@+id/reps"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_below="@+id/dateButton"
+        android:layout_toLeftOf="@+id/dateButton"
+        android:layout_toStartOf="@+id/dateButton"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_help"
+        android:id="@+id/helpButton"
+        android:elevation="1dp"
+        android:background="#990a1d"
+        android:onClick="helpUser"
+        android:layout_above="@+id/addButton"
+        android:layout_toRightOf="@+id/reps"
+        android:layout_toEndOf="@+id/reps"
+        android:layout_marginLeft="29dp"
+        android:layout_marginStart="29dp" />
+
+
+    <Button
+        android:text="ADD"
+        android:layout_height="wrap_content"
+        android:id="@+id/addButton"
+        android:onClick="addExercisesToDB"
+        android:layout_width="90dp"
+        android:layout_below="@+id/reps"
+        android:layout_toRightOf="@+id/reps"
+        android:layout_toEndOf="@+id/reps"
+        android:layout_marginTop="13dp"
+        android:backgroundTint="#990a1d"
+        android:textColor="@android:color/white" />
+
+    <RadioGroup
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/buttonGroup"
+        android:layout_centerInParent="false"
+        android:layout_below="@+id/addButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp">
+
+    <RadioButton
+        android:text="30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button30" />
+
+    <RadioButton
+        android:text="60"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button60"
+        android:layout_marginStart="10dp" />
+
+    <RadioButton
+        android:text="90"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button90"
+        android:layout_marginStart="10dp" />
+    </RadioGroup>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/stopwatch"
+        android:id="@+id/stopWatch"
+        android:layout_below="@+id/buttonGroup"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/countdownTimer"
+        android:textSize="30sp"
+        android:forceHasOverlappingRendering="false"
+        android:textColor="#990a1d"
+        android:layout_below="@+id/buttonGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
+
+    <Button
+        android:text="return home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/doneButton"
+        android:onClick="finishWorkout"
+        android:backgroundTint="#990a1d"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
