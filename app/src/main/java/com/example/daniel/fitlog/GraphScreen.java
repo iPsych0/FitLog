@@ -2,6 +2,9 @@ package com.example.daniel.fitlog;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -89,14 +93,13 @@ public class GraphScreen extends AppCompatActivity{
 
         points.setColor(Color.parseColor("#990a1d"));
         points.setDrawBackground(true);
+        points.setBackgroundColor(Color.argb(56, 255, 0, 0));
         points.setDrawDataPoints(true);
-
-        graph.getViewport().setScalable(true);
-        graph.getViewport().setScrollable(true);
 
         // Set min & max Y axis to the min and max weight values
         ArrayList<String> allWeights = dbHelper.getHighestWeightListGeneral(chosenExercise);
         Collections.sort(allWeights);
+
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(Double.parseDouble(allWeights.get(allWeights.size()-1)));
@@ -109,10 +112,15 @@ public class GraphScreen extends AppCompatActivity{
 
         graph.getGridLabelRenderer().setPadding(32);
 
+
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(dates.get(0).getTime());
         graph.getViewport().setMaxX(dates.get(dates.size() - 1).getTime());
+
         graph.getViewport().setScrollable(true);
+        graph.getViewport().setScalable(true);
+
+        graph.getGridLabelRenderer().setVerticalAxisTitle("Weight in kg");
 
         graph.getGridLabelRenderer().setHumanRounding(false);
 
