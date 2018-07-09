@@ -40,13 +40,11 @@ public class GraphScreen extends AppCompatActivity{
     LineGraphSeries<DataPoint> points;
     ArrayList<Double> weights = new ArrayList<>();
     ArrayList<Date> dates = new ArrayList<>();
-    EditText daysInput;
     Intent intentReceived;
     Bundle extrasReceived;
     String chosenExercise;
     TextView graphTitle;
     DBHelper dbHelper;
-    Button resultButton;
 
 
 
@@ -56,8 +54,6 @@ public class GraphScreen extends AppCompatActivity{
         setContentView(R.layout.activity_graph_screen);
 
         graphTitle = (TextView)findViewById(R.id.graphTitle);
-        daysInput = (EditText)findViewById(R.id.daysInput);
-        resultButton = (Button)findViewById(R.id.resultButton);
 
         dbHelper = new DBHelper(this, null, null, 1);
 
@@ -91,8 +87,6 @@ public class GraphScreen extends AppCompatActivity{
                     dbHelper.getDateListByExercise(chosenExercise).size());
         }
 
-        graph.addSeries(points);
-
         points.setColor(Color.parseColor("#990a1d"));
         points.setDrawBackground(true);
         points.setDrawDataPoints(true);
@@ -103,43 +97,38 @@ public class GraphScreen extends AppCompatActivity{
         // Set min & max Y axis to the min and max weight values
         ArrayList<String> allWeights = dbHelper.getHighestWeightListGeneral(chosenExercise);
         Collections.sort(allWeights);
-        graph.getViewport().setMinY(Double.parseDouble(allWeights.get(0)));
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(Double.parseDouble(allWeights.get(allWeights.size()-1)));
 
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-        if(dates.size() < 4)
+        if(dates.size() < 3)
             graph.getGridLabelRenderer().setNumHorizontalLabels(dates.size());
         else
-            graph.getGridLabelRenderer().setNumHorizontalLabels(4);
+            graph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
+        graph.getGridLabelRenderer().setPadding(32);
+
+        graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(dates.get(0).getTime());
         graph.getViewport().setMaxX(dates.get(dates.size() - 1).getTime());
-        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setScrollable(true);
 
         graph.getGridLabelRenderer().setHumanRounding(false);
+
+        graph.addSeries(points);
 
         points.setOnDataPointTapListener(new OnDataPointTapListener() {
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
-//                LocalDateTime date = LocalDateTime.ofEpochSecond(Double.valueOf(dataPoint.getX()).longValue(), 0, ZoneOffset.UTC);
                 long dateLong = Double.valueOf(dataPoint.getX()).longValue();
                 Date date = new Date(dateLong);
                 String dateString = new SimpleDateFormat("dd-MM-yyyy").format(date);
-//                String dateString = date.getDayOfMonth()+"-"+date.getMonthValue()+"-"+date.getYear();
                 Toast t = Toast.makeText(GraphScreen.this, dateString+":\n"+dataPoint.getY()+"kg", Toast.LENGTH_SHORT);
                 t.getView().setBackgroundColor(Color.parseColor("#990a1d"));
                 TextView v = t.getView().findViewById(android.R.id.message);
                 v.setTextColor(Color.WHITE);
                 t.show();
-            }
-        });
-
-        resultButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String input = daysInput.getText().toString();
-                graph.getViewport().setMaxX(Double.parseDouble(input));
-                graph.addSeries(points);
             }
         });
     }

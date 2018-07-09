@@ -12,43 +12,22 @@
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
-        android:layout_width="wrap_content"
-        android:layout_height="350dip"
+        android:layout_width="319dp"
+        android:layout_height="421dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="6dp" />
 
     <TextView
-        android:text="Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/graph"
-        android:layout_centerHorizontal="true"
         android:id="@+id/graphTitle"
-        android:textColor="#990a1d"
-        android:textStyle="normal|bold"
-        android:layout_marginBottom="10dp" />
-
-    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/daysInput"
-        android:hint="@string/daysInput"
-        android:textAlignment="center"
+        android:layout_marginTop="14dp"
+        android:text="Title"
         android:textColor="#990a1d"
-        android:inputType="number" />
-
-    <Button
-        android:text="Show results"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/graphTitle"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/resultButton"
-        android:background="#990a1d"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="8dp" />
+        android:textStyle="normal|bold" />
 
 </RelativeLayout>
