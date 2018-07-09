@@ -5,9 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 
 /*
  * DBHelper is a manager file that contains functions for the databases used in the AddExercises
@@ -226,6 +232,33 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Collections.sort(weightList);
         return weightList.get(weightList.size()-1);
+    }
+
+    public HashMap<Double, Date> getWeightAndDateMap(String exercise) {
+        HashMap<Double, Date> weightList = new HashMap<>();
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_MUSCLES + " WHERE exercise = '" + exercise + "'";
+
+        Cursor c = db.rawQuery(query, null);
+
+        // Move cursor over the query
+        if (c.moveToFirst()){
+            do{
+                String dateString = c.getString(c.getColumnIndex("date"));
+                DateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY);
+                // ids = 0, workout = 1, exercise = 2, reps = 3, weight = 4, date = 5
+                try {
+                    weightList.put(getHighestDailyWeight(exercise, dateString), format.parse(dateString));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } while (c.moveToNext());
+        }
+        // Close files to save memory and returns the list names
+        db.close();
+        c.close();
+
+        return weightList;
     }
 
     public ArrayList<String> getHighestWeightListGeneral(String exercise) {
