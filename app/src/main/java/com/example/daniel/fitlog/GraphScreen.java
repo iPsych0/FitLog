@@ -36,19 +36,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GraphScreen extends AppCompatActivity{
 
     GraphView graph;
     LineGraphSeries<DataPoint> points;
-    ArrayList<Double> weights = new ArrayList<>();
-    ArrayList<Date> dates = new ArrayList<>();
     Intent intentReceived;
     Bundle extrasReceived;
     String chosenExercise;
     TextView graphTitle;
     DBHelper dbHelper;
+    HashMap<Double, Date> weightMap = new HashMap<>();
 
 
 
@@ -72,21 +75,25 @@ public class GraphScreen extends AppCompatActivity{
 
         graphTitle.setText("Weight history for " + chosenExercise);
 
-//        //Hier for-loop over alle data
-        for(int x = 0; x < dbHelper.getDateListByExercise(chosenExercise).size(); x++){
-            String date = dbHelper.getDateListByExercise(chosenExercise).get(x);
-            DateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY);
-            try {
-                dates.add(format.parse(date));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        weightMap = dbHelper.getWeightAndDateMap(chosenExercise);
+
+        Map result = weightMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+        System.out.println(result);
+
+        ArrayList<Double> weights = new ArrayList<>();
+        ArrayList<Date> dates = new ArrayList<>();
+        for(Object o : result.keySet()){
+            weights.add((Double)o);
         }
-        for(int y = 0; y < dbHelper.getDateListByExercise(chosenExercise).size(); y++){
-            weights.add(dbHelper.getHighestDailyWeight(chosenExercise, dbHelper.getDateListByExercise(chosenExercise).get(y)));
+        for(int i = 0; i < weights.size(); i++){
+            dates.add((Date)result.get(weights.get(i)));
         }
 
-        for(int i = 0; i < dbHelper.getDateListByExercise(chosenExercise).size(); i++){
+        for(int i = 0; i < result.size(); i++){
             points.appendData(new DataPoint(dates.get(i), weights.get(i)), true,
                     dbHelper.getDateListByExercise(chosenExercise).size());
         }
@@ -119,8 +126,6 @@ public class GraphScreen extends AppCompatActivity{
 
         graph.getViewport().setScrollable(true);
         graph.getViewport().setScalable(true);
-
-        graph.getGridLabelRenderer().setVerticalAxisTitle("Weight in kg");
 
         graph.getGridLabelRenderer().setHumanRounding(false);
 
