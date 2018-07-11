@@ -21,13 +21,12 @@
         android:layout_marginTop="10dp" />
 
     <Spinner
+        android:id="@+id/muscleGroups"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:id="@+id/muscleGroups"
-        android:spinnerMode="dialog"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
 
     <ImageView
         android:layout_width="wrap_content"

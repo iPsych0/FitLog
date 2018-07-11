@@ -129,6 +129,11 @@ public class AddExercises extends AppCompatActivity implements DatePickerDialog.
                             android.R.layout.simple_spinner_dropdown_item);
                     exercises.setAdapter(exerciseAdapter);
                 }
+                if(muscleGroupSelected.equals("Abs")) {
+                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercises.this, R.array.abs,
+                            android.R.layout.simple_spinner_dropdown_item);
+                    exercises.setAdapter(exerciseAdapter);
+                }
             }
 
             @Override

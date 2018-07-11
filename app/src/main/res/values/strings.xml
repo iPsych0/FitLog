@@ -17,6 +17,13 @@
         <item>Biceps</item>
         <item>Triceps</item>
         <item>Shoulders</item>
+        <item>Abs</item>
+    </string-array>
+
+    <string-array name="abs">
+        <item>Sit ups</item>
+        <item>Crunches</item>
+        <item>More coming soon...</item>
     </string-array>
 
     <string-array name="back">

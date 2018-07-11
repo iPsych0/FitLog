@@ -19,8 +19,9 @@ public class HistorySelectionScreen extends AppCompatActivity {
         startActivity(maxWeights);
     }
     
-    public void comingSoon(View view){
-        Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT).show();
+    public void startSelectMuscleGroup(View view){
+        Intent intent = new Intent(view.getContext(), SelectMuscleGroup.class);
+        startActivity(intent);
     }
 
     public void goBack(View view){

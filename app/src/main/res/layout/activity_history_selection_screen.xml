@@ -43,7 +43,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:background="#990a1d"
-        android:onClick="comingSoon"
+        android:onClick="startSelectMuscleGroup"
         android:text="Workout history"
         android:textColor="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="parent"

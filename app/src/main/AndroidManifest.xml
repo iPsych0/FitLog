@@ -22,7 +22,9 @@
         <activity android:name=".AddExercises" />
         <activity android:name=".WorkoutHistory" />
         <activity android:name=".GraphScreen" />
-        <activity android:name=".HistorySelectionScreen"></activity>
+        <activity android:name=".HistorySelectionScreen" />
+        <activity android:name=".SelectMuscleGroup" />
+        <activity android:name=".WorkoutOverview"></activity>
     </application>
 
 </manifest>

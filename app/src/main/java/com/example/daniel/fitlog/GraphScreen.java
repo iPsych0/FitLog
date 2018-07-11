@@ -82,8 +82,6 @@ public class GraphScreen extends AppCompatActivity{
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
-        System.out.println(result);
-
         ArrayList<Double> weights = new ArrayList<>();
         ArrayList<Date> dates = new ArrayList<>();
         for(Object o : result.keySet()){
