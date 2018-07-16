@@ -1,4 +1,4 @@
-package com.example.daniel.fitlog;
+package com.example.daniel.fitlog.utils;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,11 +6,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 
+import com.example.daniel.fitlog.views.AddExercises;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -145,6 +151,43 @@ public class DBHelper extends SQLiteOpenHelper {
         // Close files to save memory and returns the list names
         db.close();
         c.close();
+
+        return exerciseList;
+    }
+
+    public ArrayList<String> getAllMuscleGroupWorkouts(String workout) {
+        ArrayList<String> exerciseList = new ArrayList<>();
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT DISTINCT date FROM " + TABLE_MUSCLES + " WHERE workout = '" + workout.toLowerCase() + "'";
+
+        Cursor c = db.rawQuery(query, null);
+
+        // Move cursor over the query
+        if (c.moveToFirst()){
+            do{
+                // ids = 0, workout = 1, exercise = 2, reps = 3, weight = 4, date = 5
+                exerciseList.add(c.getString(0));
+            } while (c.moveToNext());
+        }
+        // Close files to save memory and returns the list names
+        db.close();
+        c.close();
+
+        Collections.sort(exerciseList, new Comparator<String>() {
+            @Override
+            public int compare(String first, String next) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                LocalDate currentDate = LocalDate.parse(first, formatter);
+                LocalDate nextDate = LocalDate.parse(next, formatter);
+
+                if(currentDate.isBefore(nextDate))
+                    return 1;
+                else if(currentDate.isAfter(nextDate))
+                    return -1;
+                else
+                    return 0;
+            }
+        });
 
         return exerciseList;
     }

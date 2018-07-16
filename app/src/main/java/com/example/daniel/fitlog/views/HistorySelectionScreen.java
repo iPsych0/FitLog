@@ -1,10 +1,11 @@
-package com.example.daniel.fitlog;
+package com.example.daniel.fitlog.views;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+
+import com.example.daniel.fitlog.R;
 
 public class HistorySelectionScreen extends AppCompatActivity {
 
@@ -20,7 +21,7 @@ public class HistorySelectionScreen extends AppCompatActivity {
     }
     
     public void startSelectMuscleGroup(View view){
-        Intent intent = new Intent(view.getContext(), SelectMuscleGroup.class);
+        Intent intent = new Intent(view.getContext(), WorkoutOverview.class);
         startActivity(intent);
     }
 

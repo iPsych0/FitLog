@@ -1,4 +1,4 @@
-package com.example.daniel.fitlog;
+package com.example.daniel.fitlog.views;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,8 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.daniel.fitlog.utils.DBHelper;
+import com.example.daniel.fitlog.R;
 
 import java.util.ArrayList;
 

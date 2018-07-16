@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".HomeScreen"
+            android:name=".views.HomeScreen"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,12 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddExercises" />
-        <activity android:name=".WorkoutHistory" />
-        <activity android:name=".GraphScreen" />
-        <activity android:name=".HistorySelectionScreen" />
-        <activity android:name=".SelectMuscleGroup" />
-        <activity android:name=".WorkoutOverview"></activity>
+        <activity android:name=".views.AddExercises" />
+        <activity android:name=".views.WorkoutHistory" />
+        <activity android:name=".views.GraphScreen" />
+        <activity android:name=".views.HistorySelectionScreen" />
+        <activity android:name=".views.WorkoutOverview"></activity>
     </application>
 
 </manifest>
