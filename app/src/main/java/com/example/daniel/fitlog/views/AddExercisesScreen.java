@@ -32,108 +32,187 @@ import java.util.TimerTask;
 
 public class AddExercisesScreen extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    Spinner muscleGroups;
-    Spinner exercises;
-    EditText reps;
-    EditText weight;
-    Button addButton;
-    Button dateButton;
-    ImageView helpButton;
-    String muscleGroupSelected;
-    String exerciseSelected;
-    DBHelper dbHelper;
-    LocalDate selectedDate;
-    RadioButton button30;
-    RadioButton button60;
-    RadioButton button90;
-    RadioGroup buttonGroup;
-    int checked;
-    ImageView stopWatch;
-    TextView countdownTimer;
-    Calendar c;
-    int timer;
-    Timer t;
-    Vibrator vib;
-
-
-    ArrayAdapter<CharSequence> muscleGroupAdapter;
-    ArrayAdapter<CharSequence> exerciseAdapter;
-
-    public AddExercisesScreen(){
-
-    }
+    private Spinner muscleGroups;
+    private Spinner exercises;
+    private EditText reps;
+    private EditText weight;
+    private Button addButton;
+    private Button dateButton;
+    private ImageView helpButton;
+    private String muscleGroupSelected;
+    private String exerciseSelected;
+    private DBHelper dbHelper;
+    private LocalDate selectedDate;
+    private RadioButton button30;
+    private RadioButton button60;
+    private RadioButton button90;
+    private RadioGroup buttonGroup;
+    private int checked;
+    private ImageView stopWatch;
+    private TextView countdownTimer;
+    private Calendar c;
+    private int timer;
+    private Timer t;
+    private Vibrator vib;
+    private ArrayAdapter<CharSequence> muscleGroupAdapter;
+    private ArrayAdapter<CharSequence> exerciseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_exercises);
 
+        initializeScreen();
+
+        listenForMuscleGroupChanges();
+
+        listenForDateChanges();
+
+        listenForExerciseChanges();
+
+        checkStopWatch();
+
+        // Show help text when pressing the help button
+        helpButton.setOnClickListener(v -> Toast.makeText(AddExercisesScreen.this,
+                "Select an exercise and add reps and weight. " +
+                        "Every time you press 'Add', you add ONE SET to that exercise.",
+                Toast.LENGTH_LONG).show());
+    }
+
+    /**
+     * Adds a set of a given exercise to the database
+     *
+     * @param view The context
+     */
+    public void addExercisesToDB(View view) {
+        if (reps.getText().toString().isEmpty() || weight.getText().toString().isEmpty()) {
+            Toast.makeText(AddExercisesScreen.this, "Please enter both reps and weight", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Open a confirmation window before adding to the database
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddExercisesScreen.this);
+        builder
+                .setMessage("Do you want to add " + reps.getText().toString() + " reps of " +
+                        weight.getText().toString() + "kg of " +
+                        exercises.getSelectedItem().toString() + " to your workout?")
+
+                // If affirmative, add to the database
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    dbHelper.addWorkout(muscleGroups.getSelectedItem().toString().toLowerCase(),
+                            exercises.getSelectedItem().toString(), reps.getText().toString(),
+                            weight.getText().toString(), getSelectedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+                    Toast.makeText(AddExercisesScreen.this, "You did " + reps.getText().toString() + " reps of " +
+                            weight.getText().toString() + "kg of " + exercises.getSelectedItem().toString() + "s", Toast.LENGTH_LONG).show();
+                })
+
+                // Nothing is done when "No" is pressed
+                .setNegativeButton("No", (dialog, id) -> dialog.cancel())
+                .show();
+    }
+
+    /**
+     * Opens confirmation dialogue to return home
+     *
+     * @param view The context
+     */
+    public void finishWorkout(View view) {
+        // Open dialogue to confirm return to home
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddExercisesScreen.this);
+        builder
+                .setMessage("Are you finished with your workout?")
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    Intent homeScreen = new Intent(AddExercisesScreen.this, HomeScreen.class);
+                    startActivity(homeScreen);
+                    finish();
+                })
+                // Nothing is done when "No" is pressed
+                .setNegativeButton("No", (dialog, id) -> dialog.cancel())
+                .show();
+    }
+
+    /**
+     * Changes the selected date
+     *
+     * @param view       The DatePicker instance
+     * @param year       Year of the workout
+     * @param month      Month of the workout
+     * @param dayOfMonth Day of the month of the workout
+     */
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        month += 1;
+        LocalDate date = LocalDate.of(year, month, dayOfMonth);
+        setSelectedDate(date);
+        dateButton.setText(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+    }
+
+    /*
+     * Listeners and initialization
+     */
+
+    private void initializeScreen() {
+        // Get the DB
         dbHelper = new DBHelper(this, null, null, 1);
+
+        // Get all UI elements
         vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        muscleGroups = (Spinner) findViewById(R.id.muscleGroups);
+        exercises = (Spinner) findViewById(R.id.exercises);
+        reps = (EditText) findViewById(R.id.reps);
+        weight = (EditText) findViewById(R.id.weight);
+        dateButton = (Button) findViewById(R.id.dateButton);
+        addButton = (Button) findViewById(R.id.addButton);
+        helpButton = (ImageView) findViewById(R.id.helpButton);
+        button30 = (RadioButton) findViewById(R.id.button30);
+        button60 = (RadioButton) findViewById(R.id.button60);
+        button90 = (RadioButton) findViewById(R.id.button90);
+        buttonGroup = (RadioGroup) findViewById(R.id.buttonGroup);
+        stopWatch = (ImageView) findViewById(R.id.stopWatch);
+        countdownTimer = (TextView) findViewById(R.id.countdownTimer);
 
-        muscleGroups = (Spinner)findViewById(R.id.muscleGroups);
-        exercises = (Spinner)findViewById(R.id.exercises);
-        reps = (EditText)findViewById(R.id.reps);
-        weight = (EditText)findViewById(R.id.weight);
-        dateButton = (Button)findViewById(R.id.dateButton);
-        addButton = (Button)findViewById(R.id.addButton);
-        helpButton = (ImageView)findViewById(R.id.helpButton);
-        button30 = (RadioButton)findViewById(R.id.button30);
-        button60 = (RadioButton)findViewById(R.id.button60);
-        button90 = (RadioButton)findViewById(R.id.button90);
-        buttonGroup = (RadioGroup)findViewById(R.id.buttonGroup);
-        stopWatch = (ImageView)findViewById(R.id.stopWatch);
-        countdownTimer = (TextView)findViewById(R.id.countdownTimer);
-
+        // Set the calendar to today's date by default
         c = Calendar.getInstance();
         selectedDate = LocalDate.now();
         dateButton.setText(selectedDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
+        // Populate the muscle group drop down
         muscleGroupAdapter = ArrayAdapter.createFromResource(this, R.array.muscleGroups,
                 android.R.layout.simple_spinner_item);
         muscleGroupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         muscleGroups.setAdapter(muscleGroupAdapter);
+    }
 
+    private void listenForMuscleGroupChanges() {
         muscleGroups.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 muscleGroupSelected = parent.getItemAtPosition(position).toString();
 
-                if(muscleGroupSelected.equals("Back")) {
+                if (muscleGroupSelected.equals("Back")) {
                     exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.back,
                             android.R.layout.simple_spinner_dropdown_item);
-                    exercises.setAdapter(exerciseAdapter);
-                }
-                if(muscleGroupSelected.equals("Chest")) {
+                } else if (muscleGroupSelected.equals("Chest")) {
                     exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.chest,
                             android.R.layout.simple_spinner_dropdown_item);
-                    exercises.setAdapter(exerciseAdapter);
-                }
-                if(muscleGroupSelected.equals("Legs")) {
+                } else if (muscleGroupSelected.equals("Legs")) {
                     exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.legs,
                             android.R.layout.simple_spinner_dropdown_item);
-                    exercises.setAdapter(exerciseAdapter);
-                }
-                if(muscleGroupSelected.equals("Shoulders")) {
+                } else if (muscleGroupSelected.equals("Shoulders")) {
                     exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.shoulders,
                             android.R.layout.simple_spinner_dropdown_item);
-                    exercises.setAdapter(exerciseAdapter);
-                }
-                if(muscleGroupSelected.equals("Biceps")) {
+                } else if (muscleGroupSelected.equals("Biceps")) {
                     exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.biceps,
                             android.R.layout.simple_spinner_dropdown_item);
-                    exercises.setAdapter(exerciseAdapter);
-                }
-                if(muscleGroupSelected.equals("Triceps")) {
+                } else if (muscleGroupSelected.equals("Triceps")) {
                     exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.triceps,
                             android.R.layout.simple_spinner_dropdown_item);
-                    exercises.setAdapter(exerciseAdapter);
-                }
-                if(muscleGroupSelected.equals("Abs")) {
+                } else if (muscleGroupSelected.equals("Abs")) {
                     exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.abs,
                             android.R.layout.simple_spinner_dropdown_item);
-                    exercises.setAdapter(exerciseAdapter);
                 }
+
+                exercises.setAdapter(exerciseAdapter);
             }
 
             @Override
@@ -141,30 +220,24 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
 
             }
         });
+    }
 
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Use the current date as the default date in the picker
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
+    private void listenForDateChanges() {
+        // Listen for when to open the calendar
+        dateButton.setOnClickListener(v -> {
+            // Use the current date as the default date in the picker
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
 
-                // Create a new instance of DatePickerDialog and return it
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddExercisesScreen.this, AddExercisesScreen.this, year, month, day);
-                datePickerDialog.show();
-            }
+            // Open the calendar pop-up when pressed
+            DatePickerDialog datePickerDialog = new DatePickerDialog(AddExercisesScreen.this, AddExercisesScreen.this, year, month, day);
+            datePickerDialog.show();
         });
+    }
 
-        helpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(AddExercisesScreen.this, "Select an exercise and add reps and weight. " +
-                        "Every time you press 'Add', you add ONE SET to that exercise.",
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-
+    private void listenForExerciseChanges() {
+        // Listen for changes to the exercise dropdown
         exercises.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -176,150 +249,75 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
 
             }
         });
+    }
 
-        buttonGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                checked = buttonGroup.indexOfChild(findViewById(checkedId));
-                switch(checked){
-                    case 0:
-                        countdownTimer.setText("30");
-                        timer = Integer.parseInt(countdownTimer.getText().toString());
-                        if(t != null){
-                            t.cancel();
-                        }
-                        break;
-                    case 1:
-                        countdownTimer.setText("60");
-                        timer = Integer.parseInt(countdownTimer.getText().toString());
-                        if(t != null){
-                            t.cancel();
-                        }
-                        break;
-                    case 2:
-                        countdownTimer.setText("90");
-                        timer = Integer.parseInt(countdownTimer.getText().toString());
-                        if(t != null){
-                            t.cancel();
-                        }
-                        break;
-                    default:
-                        countdownTimer.setText("");
-                        timer = 0;
-                        if(t != null){
-                            t.cancel();
-                        }
-                        break;
-                }
-            }
-        });
-
-        countdownTimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    if (countdownTimer.getText().toString().isEmpty()) {
-                        return;
-                    }
-                    if(t != null){
+    private void checkStopWatch() {
+        // Change the timer cooldown
+        buttonGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            checked = buttonGroup.indexOfChild(findViewById(checkedId));
+            switch (checked) {
+                case 0:
+                    countdownTimer.setText("30");
+                    timer = Integer.parseInt(countdownTimer.getText().toString());
+                    if (t != null) {
                         t.cancel();
-                        t = null;
-                        return;
                     }
+                    break;
+                case 1:
+                    countdownTimer.setText("60");
+                    timer = Integer.parseInt(countdownTimer.getText().toString());
+                    if (t != null) {
+                        t.cancel();
+                    }
+                    break;
+                case 2:
+                    countdownTimer.setText("90");
+                    timer = Integer.parseInt(countdownTimer.getText().toString());
+                    if (t != null) {
+                        t.cancel();
+                    }
+                    break;
+                default:
+                    countdownTimer.setText("");
+                    timer = 0;
+                    if (t != null) {
+                        t.cancel();
+                    }
+                    break;
+            }
+        });
 
-                    t = new Timer();
-                    t.scheduleAtFixedRate(new TimerTask() {
-                        @Override
-                        public void run() {
-                            if (timer <= 1) {
-                                vib.vibrate(2500);
-                                t.cancel();
-                            }
-                            timer--;
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    countdownTimer.setText(String.valueOf(timer));
-                                }
-                            });
-
-                        }
-                    }, 1000, 1000);
-
-
-
+        countdownTimer.setOnClickListener((View v) -> {
+            if (countdownTimer.getText().toString().isEmpty()) {
+                return;
+            }
+            if (t != null) {
+                t.cancel();
+                t = null;
+                return;
             }
 
+            t = new Timer();
+            t.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (timer <= 1) {
+                        vib.vibrate(2000);
+                        t.cancel();
+                    }
+                    timer--;
+                    runOnUiThread(() -> countdownTimer.setText(String.valueOf(timer)));
+
+                }
+            }, 1000, 1000);
         });
     }
 
-    public void addExercisesToDB(View view){
-        if(reps.getText().toString().isEmpty() || weight.getText().toString().isEmpty()){
-            Toast.makeText(AddExercisesScreen.this, "Please enter the number of reps and weight", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        // Voeg hier de oefeningen toe aan de database
-        AlertDialog.Builder builder = new AlertDialog.Builder(AddExercisesScreen.this);
-        builder
-                .setMessage("Do you want to add " + reps.getText().toString() + " reps of " +
-                        weight.getText().toString() + "kg of " +
-                        exercises.getSelectedItem().toString() + " to your workout?")
-                .setPositiveButton("Yes",  new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dbHelper.addWorkout(muscleGroups.getSelectedItem().toString().toLowerCase(),
-                                exercises.getSelectedItem().toString(), reps.getText().toString(),
-                                weight.getText().toString(), getSelectedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-
-                        Toast.makeText(AddExercisesScreen.this, "You did " + reps.getText().toString() + " reps of " +
-                                weight.getText().toString() + "kg of " + exercises.getSelectedItem().toString() + "s", Toast.LENGTH_LONG).show();
-                    }
-                })
-                // Nothing is done when "No" is pressed
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog,int id) {
-                        dialog.cancel();
-                    }
-                })
-                .show();
-    }
-
-    public void finishWorkout(View view){
-        // Voeg hier de oefeningen toe aan de database
-        AlertDialog.Builder builder = new AlertDialog.Builder(AddExercisesScreen.this);
-        builder
-                .setMessage("Are you finished with your workout?")
-                .setPositiveButton("Yes",  new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent homeScreen = new Intent(AddExercisesScreen.this, HomeScreen.class);
-                        startActivity(homeScreen);
-                        finish();
-                    }
-                })
-                // Nothing is done when "No" is pressed
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog,int id) {
-                        dialog.cancel();
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        month += 1;
-        LocalDate date = LocalDate.of(year, month, dayOfMonth);
-        setSelectedDate(date);
-        dateButton.setText(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-    }
-
-    public LocalDate getSelectedDate(){
+    public LocalDate getSelectedDate() {
         return selectedDate;
     }
 
-    public void setSelectedDate(LocalDate selection){
+    public void setSelectedDate(LocalDate selection) {
         this.selectedDate = selection;
     }
 }

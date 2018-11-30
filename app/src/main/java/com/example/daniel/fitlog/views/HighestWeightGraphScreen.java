@@ -23,63 +23,56 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HighestWeightGraphScreen extends AppCompatActivity{
+public class HighestWeightGraphScreen extends AppCompatActivity {
 
-    GraphView graph;
-    LineGraphSeries<DataPoint> points;
-    Intent intentReceived;
-    Bundle extrasReceived;
-    String chosenExercise;
-    TextView graphTitle;
-    DBHelper dbHelper;
-    HashMap<Double, Date> weightMap = new HashMap<>();
-
-
+    private GraphView graph;
+    private LineGraphSeries<DataPoint> points;
+    private Intent intentReceived;
+    private Bundle extrasReceived;
+    private String chosenExercise;
+    private TextView graphTitle;
+    private DBHelper dbHelper;
+    private HashMap<Double, Date> weightMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_highest_weight_graph_screen);
 
-        graphTitle = (TextView)findViewById(R.id.graphTitle);
+        init();
 
-        dbHelper = new DBHelper(this, null, null, 1);
+        List<Date> dates = populateGraph();
 
-        intentReceived = getIntent();
-        extrasReceived = intentReceived.getExtras();
-        chosenExercise = extrasReceived.getString("chosenExercise");
+        stylizeGraph(dates);
 
-        graphTitle.setText("Graph for " + chosenExercise);
+        listenForPointTaps();
+    }
 
-        graph = (GraphView) findViewById(R.id.graph);
-        points = new LineGraphSeries<>();
+    /**
+     * Listens for taps on points in the graph and displays an info message
+     */
+    private void listenForPointTaps() {
+        points.setOnDataPointTapListener((series, dataPoint) -> {
+            long dateLong = Double.valueOf(dataPoint.getX()).longValue();
+            Date date = new Date(dateLong);
+            String dateString = new SimpleDateFormat("dd-MM-yyyy").format(date);
+            Toast t = Toast.makeText(HighestWeightGraphScreen.this, dateString + ":\n" + dataPoint.getY() + "kg", Toast.LENGTH_SHORT);
+            t.getView().setBackgroundColor(Color.parseColor("#990a1d"));
+            TextView v = t.getView().findViewById(android.R.id.message);
+            v.setTextColor(Color.WHITE);
+            t.show();
+        });
+    }
 
-        graphTitle.setText("Weight history for " + chosenExercise);
-
-        weightMap = dbHelper.getWeightAndDateMap(chosenExercise);
-
-        Map result = weightMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-
-        ArrayList<Double> weights = new ArrayList<>();
-        ArrayList<Date> dates = new ArrayList<>();
-        for(Object o : result.keySet()){
-            weights.add((Double)o);
-        }
-        for(int i = 0; i < weights.size(); i++){
-            dates.add((Date)result.get(weights.get(i)));
-        }
-
-        for(int i = 0; i < result.size(); i++){
-            points.appendData(new DataPoint(dates.get(i), weights.get(i)), true,
-                    dbHelper.getDateListByExercise(chosenExercise).size());
-        }
-
+    /**
+     * Stylizes the graph
+     * @param dates The list of dates to be stylized
+     */
+    private void stylizeGraph(List<Date> dates) {
         points.setColor(Color.parseColor("#990a1d"));
         points.setDrawBackground(true);
         points.setBackgroundColor(Color.argb(56, 255, 0, 0));
@@ -91,40 +84,80 @@ public class HighestWeightGraphScreen extends AppCompatActivity{
 
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(Double.parseDouble(allWeights.get(allWeights.size()-1)));
+        graph.getViewport().setMaxY(Double.parseDouble(allWeights.get(allWeights.size() - 1)));
 
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-        if(dates.size() < 3)
+        if (dates.size() < 3)
             graph.getGridLabelRenderer().setNumHorizontalLabels(dates.size());
         else
             graph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
         graph.getGridLabelRenderer().setPadding(32);
 
-
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(dates.get(0).getTime());
         graph.getViewport().setMaxX(dates.get(dates.size() - 1).getTime());
 
         graph.getViewport().setScrollable(true);
+        graph.getViewport().setScrollableY(true);
+        graph.getViewport().setScalableY(true);
         graph.getViewport().setScalable(true);
 
         graph.getGridLabelRenderer().setHumanRounding(false);
 
         graph.addSeries(points);
+    }
 
-        points.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-                long dateLong = Double.valueOf(dataPoint.getX()).longValue();
-                Date date = new Date(dateLong);
-                String dateString = new SimpleDateFormat("dd-MM-yyyy").format(date);
-                Toast t = Toast.makeText(HighestWeightGraphScreen.this, dateString+":\n"+dataPoint.getY()+"kg", Toast.LENGTH_SHORT);
-                t.getView().setBackgroundColor(Color.parseColor("#990a1d"));
-                TextView v = t.getView().findViewById(android.R.id.message);
-                v.setTextColor(Color.WHITE);
-                t.show();
-            }
-        });
+    /**
+     * Initializes the graph screen
+     */
+    private void init() {
+        graphTitle = (TextView) findViewById(R.id.graphTitle);
+        graph = (GraphView) findViewById(R.id.graph);
+
+        dbHelper = new DBHelper(this, null, null, 1);
+
+        intentReceived = getIntent();
+        extrasReceived = intentReceived.getExtras();
+
+        if (extrasReceived != null) {
+            chosenExercise = extrasReceived.getString("chosenExercise");
+        }else{
+            Toast.makeText(this, "Could not get the chosen exercise from the previous screen. Please retry.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        points = new LineGraphSeries<>();
+
+        graphTitle.setText("Highest weight history for " + chosenExercise);
+    }
+
+    /**
+     * Populates the graph with dates and weights from the database
+     * @return A list of dates, to be used to format the graph
+     */
+    private List<Date> populateGraph() {
+        weightMap = dbHelper.getWeightAndDateMap(chosenExercise);
+
+        Map result = weightMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+        ArrayList<Double> weights = new ArrayList<>();
+        ArrayList<Date> dates = new ArrayList<>();
+        for (Object o : result.keySet()) {
+            weights.add((Double) o);
+        }
+        for (int i = 0; i < weights.size(); i++) {
+            dates.add((Date) result.get(weights.get(i)));
+        }
+
+        for (int i = 0; i < result.size(); i++) {
+            points.appendData(new DataPoint(dates.get(i), weights.get(i)), true,
+                    dbHelper.getDateListByExercise(chosenExercise).size());
+        }
+
+        return dates;
     }
 }

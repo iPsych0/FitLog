@@ -29,30 +29,25 @@ import java.util.Locale;
 public class DBHelper extends SQLiteOpenHelper {
 
     // Declaring context, database name and database version
-    Context context;
-    String name;
-    int version;
-    AddExercisesScreen addExercisesScreen;
+    private Context context;
+    private String name;
+    private int version;
 
     // Setting the database parameters
     private static final String DATABASE_NAME = "workouts.db";
     private static final int DATABASE_VERSION = 14;
 
-
-    public static final String TABLE_MUSCLES = "musclesTable";
-    public static final String COLUMN_MUSCLES_ID = "_id";
-    public static final String COLUMN_WORKOUT = "workout";
-    public static final String COLUMN_EXERCISE = "exercise";
-    public static final String COLUMN_REPS = "reps";
-    public static final String COLUMN_WEIGHT = "weight";
-    public static final String COLUMN_DATE = "date";
-
-
+    private static final String TABLE_MUSCLES = "musclesTable";
+    private static final String COLUMN_MUSCLES_ID = "_id";
+    private static final String COLUMN_WORKOUT = "workout";
+    private static final String COLUMN_EXERCISE = "exercise";
+    private static final String COLUMN_REPS = "reps";
+    private static final String COLUMN_WEIGHT = "weight";
+    private static final String COLUMN_DATE = "date";
 
     // DBHelper constructor
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
-        addExercisesScreen = new AddExercisesScreen();
         this.context = context;
         this.name = DATABASE_NAME;
         this.version = DATABASE_VERSION;

@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.daniel.fitlog.R;
 import com.example.daniel.fitlog.com.example.daniel.fitlog.models.Set;
@@ -17,20 +18,21 @@ import java.util.List;
 
 public class WorkoutHistoryScreen extends AppCompatActivity {
 
-    TextView dateText;
-    Intent received;
-    Bundle bundle;
-    String chosenWorkout;
-    String selectedDate;
-    ListView setList;
-    ArrayAdapter<String> setsAdapter;
-    DBHelper dbHelper = new DBHelper(this, null, null, 1);
+    private TextView dateText;
+    private Intent received;
+    private Bundle bundle;
+    private String chosenWorkout;
+    private String selectedDate;
+    private ListView setList;
+    private ArrayAdapter<String> setsAdapter;
+    private DBHelper dbHelper = new DBHelper(this, null, null, 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_history);
 
+        // Set the UI elements
         dateText = findViewById(R.id.dateText);
         setList = findViewById(R.id.setsList);
 
@@ -42,6 +44,9 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
         if (bundle != null) {
             chosenWorkout = bundle.getString("chosenWorkout");
             selectedDate = bundle.getString("date");
+        }else{
+            Toast.makeText(this, "Could not retrieve the selected workout from the previous screen. Please retry.", Toast.LENGTH_LONG).show();
+            return;
         }
 
         // Set the text at the top to the chosen values
@@ -54,6 +59,7 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
         // Order the sets by exercise
         List<String> exercises = formatExercises(sets);
 
+        // Fill the ListView
         setsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exercises);
         setList.setAdapter(setsAdapter);
 
