@@ -1,23 +1,22 @@
 package com.example.daniel.fitlog.views;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.daniel.fitlog.R;
-import com.example.daniel.fitlog.com.example.daniel.fitlog.models.Workout;
+import com.example.daniel.fitlog.com.example.daniel.fitlog.models.Set;
 import com.example.daniel.fitlog.utils.DBHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class WorkoutOverview extends AppCompatActivity {
+public class WorkoutOverviewScreen extends AppCompatActivity {
 
     String chosenWorkout = "back";
     String topTextString;
@@ -57,13 +56,21 @@ public class WorkoutOverview extends AppCompatActivity {
                 topTextString = "All " +chosenWorkout.toLowerCase() + " workouts";
                 topText.setText(topTextString);
                 muscleGroups = dbHelper.getAllMuscleGroupWorkouts(chosenWorkout);
-                resultsLVadapter = new ArrayAdapter<>(WorkoutOverview.this, android.R.layout.simple_list_item_1, muscleGroups);
+                resultsLVadapter = new ArrayAdapter<>(WorkoutOverviewScreen.this, android.R.layout.simple_list_item_1, muscleGroups);
                 scrollView.setAdapter(resultsLVadapter);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+        scrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                List<Set> sets = dbHelper.getAllSetsByExerciseAndDate(chosenWorkout, adapterView.getItemAtPosition(i).toString());
             }
         });
 

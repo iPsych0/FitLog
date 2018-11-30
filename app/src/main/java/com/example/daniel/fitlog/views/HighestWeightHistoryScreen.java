@@ -18,7 +18,7 @@ import com.example.daniel.fitlog.R;
 
 import java.util.ArrayList;
 
-public class WorkoutHistory extends AppCompatActivity {
+public class HighestWeightHistoryScreen extends AppCompatActivity {
 
     Spinner muscleGroups;
     ListView resultsLV;
@@ -31,7 +31,7 @@ public class WorkoutHistory extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_workout_history);
+        setContentView(R.layout.activity_highest_weight_history);
 
         dbHelper = new DBHelper(this, null, null, 1);
         resultsLV = (ListView)findViewById(R.id.resultsLV);
@@ -53,13 +53,13 @@ public class WorkoutHistory extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final String chosenExercise = String.valueOf(parent.getItemAtPosition(position));
-                AlertDialog.Builder builder = new AlertDialog.Builder(WorkoutHistory.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(HighestWeightHistoryScreen.this);
                 builder
                         .setMessage("Your current highest weight for " + chosenExercise + " is " + dbHelper.getHighestWeightList(chosenExercise).get(0) + "kg")
                         .setPositiveButton("Show statistics",  new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                Intent graphScreen = new Intent(WorkoutHistory.this, GraphScreen.class);
+                                Intent graphScreen = new Intent(HighestWeightHistoryScreen.this, HighestWeightGraphScreen.class);
 
                                 Bundle bundle = new Bundle();
                                 bundle.putString("chosenExercise", chosenExercise);
@@ -84,7 +84,7 @@ public class WorkoutHistory extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 allWorkouts = dbHelper.getExerciseList(muscleGroups.getSelectedItem().toString().toLowerCase());
-                resultsLVadapter = new ArrayAdapter<>(WorkoutHistory.this, android.R.layout.simple_list_item_1, allWorkouts);
+                resultsLVadapter = new ArrayAdapter<>(HighestWeightHistoryScreen.this, android.R.layout.simple_list_item_1, allWorkouts);
                 resultsLV.setAdapter(resultsLVadapter);
             }
 
@@ -103,7 +103,7 @@ public class WorkoutHistory extends AppCompatActivity {
     }
 
     public void goBack(View view){
-        Intent intent = new Intent(view.getContext(), HistorySelectionScreen.class);
+        Intent intent = new Intent(view.getContext(), SelectionScreen.class);
         startActivity(intent);
     }
 }

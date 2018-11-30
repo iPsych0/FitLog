@@ -19,11 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.AddExercises" />
-        <activity android:name=".views.WorkoutHistory" />
-        <activity android:name=".views.GraphScreen" />
-        <activity android:name=".views.HistorySelectionScreen" />
-        <activity android:name=".views.WorkoutOverview"></activity>
+        <activity android:name=".views.AddExercisesScreen" />
+        <activity android:name=".views.HighestWeightHistoryScreen" />
+        <activity android:name=".views.HighestWeightGraphScreen" />
+        <activity android:name=".views.SelectionScreen" />
+        <activity android:name=".views.WorkoutOverviewScreen" />
+        <activity android:name=".views.WorkoutHistoryScreen"></activity>
     </application>
 
 </manifest>

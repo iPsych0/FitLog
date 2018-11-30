@@ -30,7 +30,7 @@ import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AddExercises extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddExercisesScreen extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     Spinner muscleGroups;
     Spinner exercises;
@@ -59,7 +59,7 @@ public class AddExercises extends AppCompatActivity implements DatePickerDialog.
     ArrayAdapter<CharSequence> muscleGroupAdapter;
     ArrayAdapter<CharSequence> exerciseAdapter;
 
-    public AddExercises(){
+    public AddExercisesScreen(){
 
     }
 
@@ -100,37 +100,37 @@ public class AddExercises extends AppCompatActivity implements DatePickerDialog.
                 muscleGroupSelected = parent.getItemAtPosition(position).toString();
 
                 if(muscleGroupSelected.equals("Back")) {
-                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercises.this, R.array.back,
+                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.back,
                             android.R.layout.simple_spinner_dropdown_item);
                     exercises.setAdapter(exerciseAdapter);
                 }
                 if(muscleGroupSelected.equals("Chest")) {
-                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercises.this, R.array.chest,
+                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.chest,
                             android.R.layout.simple_spinner_dropdown_item);
                     exercises.setAdapter(exerciseAdapter);
                 }
                 if(muscleGroupSelected.equals("Legs")) {
-                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercises.this, R.array.legs,
+                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.legs,
                             android.R.layout.simple_spinner_dropdown_item);
                     exercises.setAdapter(exerciseAdapter);
                 }
                 if(muscleGroupSelected.equals("Shoulders")) {
-                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercises.this, R.array.shoulders,
+                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.shoulders,
                             android.R.layout.simple_spinner_dropdown_item);
                     exercises.setAdapter(exerciseAdapter);
                 }
                 if(muscleGroupSelected.equals("Biceps")) {
-                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercises.this, R.array.biceps,
+                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.biceps,
                             android.R.layout.simple_spinner_dropdown_item);
                     exercises.setAdapter(exerciseAdapter);
                 }
                 if(muscleGroupSelected.equals("Triceps")) {
-                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercises.this, R.array.triceps,
+                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.triceps,
                             android.R.layout.simple_spinner_dropdown_item);
                     exercises.setAdapter(exerciseAdapter);
                 }
                 if(muscleGroupSelected.equals("Abs")) {
-                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercises.this, R.array.abs,
+                    exerciseAdapter = ArrayAdapter.createFromResource(AddExercisesScreen.this, R.array.abs,
                             android.R.layout.simple_spinner_dropdown_item);
                     exercises.setAdapter(exerciseAdapter);
                 }
@@ -151,7 +151,7 @@ public class AddExercises extends AppCompatActivity implements DatePickerDialog.
                 int day = c.get(Calendar.DAY_OF_MONTH);
 
                 // Create a new instance of DatePickerDialog and return it
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddExercises.this, AddExercises.this, year, month, day);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddExercisesScreen.this, AddExercisesScreen.this, year, month, day);
                 datePickerDialog.show();
             }
         });
@@ -159,7 +159,7 @@ public class AddExercises extends AppCompatActivity implements DatePickerDialog.
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AddExercises.this, "Select an exercise and add reps and weight. " +
+                Toast.makeText(AddExercisesScreen.this, "Select an exercise and add reps and weight. " +
                         "Every time you press 'Add', you add ONE SET to that exercise.",
                         Toast.LENGTH_LONG).show();
             }
@@ -254,11 +254,11 @@ public class AddExercises extends AppCompatActivity implements DatePickerDialog.
 
     public void addExercisesToDB(View view){
         if(reps.getText().toString().isEmpty() || weight.getText().toString().isEmpty()){
-            Toast.makeText(AddExercises.this, "Please enter the number of reps and weight", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddExercisesScreen.this, "Please enter the number of reps and weight", Toast.LENGTH_SHORT).show();
             return;
         }
         // Voeg hier de oefeningen toe aan de database
-        AlertDialog.Builder builder = new AlertDialog.Builder(AddExercises.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddExercisesScreen.this);
         builder
                 .setMessage("Do you want to add " + reps.getText().toString() + " reps of " +
                         weight.getText().toString() + "kg of " +
@@ -270,7 +270,7 @@ public class AddExercises extends AppCompatActivity implements DatePickerDialog.
                                 exercises.getSelectedItem().toString(), reps.getText().toString(),
                                 weight.getText().toString(), getSelectedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-                        Toast.makeText(AddExercises.this, "You did " + reps.getText().toString() + " reps of " +
+                        Toast.makeText(AddExercisesScreen.this, "You did " + reps.getText().toString() + " reps of " +
                                 weight.getText().toString() + "kg of " + exercises.getSelectedItem().toString() + "s", Toast.LENGTH_LONG).show();
                     }
                 })
@@ -286,13 +286,13 @@ public class AddExercises extends AppCompatActivity implements DatePickerDialog.
 
     public void finishWorkout(View view){
         // Voeg hier de oefeningen toe aan de database
-        AlertDialog.Builder builder = new AlertDialog.Builder(AddExercises.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddExercisesScreen.this);
         builder
                 .setMessage("Are you finished with your workout?")
                 .setPositiveButton("Yes",  new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent homeScreen = new Intent(AddExercises.this, HomeScreen.class);
+                        Intent homeScreen = new Intent(AddExercisesScreen.this, HomeScreen.class);
                         startActivity(homeScreen);
                         finish();
                     }

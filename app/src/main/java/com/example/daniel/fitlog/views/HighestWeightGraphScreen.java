@@ -26,7 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class GraphScreen extends AppCompatActivity{
+public class HighestWeightGraphScreen extends AppCompatActivity{
 
     GraphView graph;
     LineGraphSeries<DataPoint> points;
@@ -42,7 +42,7 @@ public class GraphScreen extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph_screen);
+        setContentView(R.layout.activity_highest_weight_graph_screen);
 
         graphTitle = (TextView)findViewById(R.id.graphTitle);
 
@@ -119,7 +119,7 @@ public class GraphScreen extends AppCompatActivity{
                 long dateLong = Double.valueOf(dataPoint.getX()).longValue();
                 Date date = new Date(dateLong);
                 String dateString = new SimpleDateFormat("dd-MM-yyyy").format(date);
-                Toast t = Toast.makeText(GraphScreen.this, dateString+":\n"+dataPoint.getY()+"kg", Toast.LENGTH_SHORT);
+                Toast t = Toast.makeText(HighestWeightGraphScreen.this, dateString+":\n"+dataPoint.getY()+"kg", Toast.LENGTH_SHORT);
                 t.getView().setBackgroundColor(Color.parseColor("#990a1d"));
                 TextView v = t.getView().findViewById(android.R.id.message);
                 v.setTextColor(Color.WHITE);

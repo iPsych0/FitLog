@@ -7,21 +7,21 @@ import android.view.View;
 
 import com.example.daniel.fitlog.R;
 
-public class HistorySelectionScreen extends AppCompatActivity {
+public class SelectionScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history_selection_screen);
+        setContentView(R.layout.activity_selection);
     }
 
     public void startMaxWeights(View view){
-        Intent maxWeights = new Intent(view.getContext(), WorkoutHistory.class);
+        Intent maxWeights = new Intent(view.getContext(), HighestWeightHistoryScreen.class);
         startActivity(maxWeights);
     }
     
     public void startSelectMuscleGroup(View view){
-        Intent intent = new Intent(view.getContext(), WorkoutOverview.class);
+        Intent intent = new Intent(view.getContext(), WorkoutOverviewScreen.class);
         startActivity(intent);
     }
 

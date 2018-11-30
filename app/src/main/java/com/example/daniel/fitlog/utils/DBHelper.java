@@ -6,13 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 
-import com.example.daniel.fitlog.views.AddExercises;
+import com.example.daniel.fitlog.com.example.daniel.fitlog.models.Set;
+import com.example.daniel.fitlog.views.AddExercisesScreen;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 /*
- * DBHelper is a manager file that contains functions for the databases used in the AddExercises
+ * DBHelper is a manager file that contains functions for the databases used in the AddExercisesScreen
  * Activity and has all workout data stored in a .db file.
  */
 
@@ -32,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
     Context context;
     String name;
     int version;
-    AddExercises addExercises;
+    AddExercisesScreen addExercisesScreen;
 
     // Setting the database parameters
     private static final String DATABASE_NAME = "workouts.db";
@@ -52,7 +52,7 @@ public class DBHelper extends SQLiteOpenHelper {
     // DBHelper constructor
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
-        addExercises = new AddExercises();
+        addExercisesScreen = new AddExercisesScreen();
         this.context = context;
         this.name = DATABASE_NAME;
         this.version = DATABASE_VERSION;
@@ -110,30 +110,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    /*
-     * Function that queries over all unique list names and returns an ArrayList of all unique lists
-     */
-    public ArrayList<String> getWorkoutList() {
-        ArrayList<String> workoutList = new ArrayList<>();
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_MUSCLES + ";";
-
-        Cursor c = db.rawQuery(query, null);
-
-        // Move cursor over the query
-        if (c.moveToFirst()){
-            do{
-                // ids = 0, workout = 1, exercise = 2, reps = 3, weight = 4, date = 5
-                workoutList.add(c.getString(1));
-            } while (c.moveToNext());
-        }
-        // Close files to save memory and returns the list names
-        db.close();
-        c.close();
-
-        return workoutList;
-    }
-
     public ArrayList<String> getExerciseList(String workout) {
         ArrayList<String> exerciseList = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
@@ -153,6 +129,28 @@ public class DBHelper extends SQLiteOpenHelper {
         c.close();
 
         return exerciseList;
+    }
+
+    public ArrayList<Set> getAllSetsByExerciseAndDate(String workout, String date){
+        ArrayList<Set> setList = new ArrayList<>();
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_MUSCLES + " WHERE workout = '" + workout.toLowerCase() + "' AND date = '" + date + "';";
+
+        Cursor c = db.rawQuery(query, null);
+
+        // Move cursor over the query
+        if (c.moveToFirst()){
+            do{
+                Set set = new Set(c.getString(1), c.getString(2), c.getInt(3), c.getInt(4), c.getString(5));
+                setList.add(set);
+                // ids = 0, workout = 1, exercise = 2, reps = 3, weight = 4, date = 5
+            } while (c.moveToNext());
+        }
+        // Close files to save memory and returns the list names
+        db.close();
+        c.close();
+
+        return setList;
     }
 
     public ArrayList<String> getAllMuscleGroupWorkouts(String workout) {

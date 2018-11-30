@@ -16,19 +16,19 @@ public class HomeScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen);
+        setContentView(R.layout.activity_home);
 
         newWorkoutButton = (Button)findViewById(R.id.newWorkoutButton);
         workoutHistoryButton = (Button)findViewById(R.id.workoutHistoryButton);
     }
 
     public void startAddExercises(View view){
-        Intent addExercises = new Intent(view.getContext(), AddExercises.class);
+        Intent addExercises = new Intent(view.getContext(), AddExercisesScreen.class);
         startActivity(addExercises);
     }
 
     public void startWorkoutHistory(View view){
-        Intent workoutHistory = new Intent(view.getContext(), HistorySelectionScreen.class);
+        Intent workoutHistory = new Intent(view.getContext(), SelectionScreen.class);
         startActivity(workoutHistory);
     }
 }

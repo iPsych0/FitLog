@@ -1,11 +1,11 @@
 package com.example.daniel.fitlog.com.example.daniel.fitlog.models;
 
-public class Workout {
+public class Set {
 
     private String muscleGroup, exercise, date;
     private int reps, weight;
 
-    public Workout(String muscleGroup, String exercise, int reps, int weight, String date) {
+    public Set(String muscleGroup, String exercise, int reps, int weight, String date) {
         this.muscleGroup = muscleGroup;
         this.exercise = exercise;
         this.date = date;
