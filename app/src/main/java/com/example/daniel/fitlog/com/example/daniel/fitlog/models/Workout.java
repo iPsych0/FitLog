@@ -5,7 +5,7 @@ public class Workout {
     private String muscleGroup, exercise, date;
     private int reps, weight;
 
-    public Workout(String muscleGroup, String exercise, String date, int reps, int weight) {
+    public Workout(String muscleGroup, String exercise, int reps, int weight, String date) {
         this.muscleGroup = muscleGroup;
         this.exercise = exercise;
         this.date = date;

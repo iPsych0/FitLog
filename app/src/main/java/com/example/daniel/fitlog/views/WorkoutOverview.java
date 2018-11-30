@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class WorkoutOverview extends AppCompatActivity {
 
     String chosenWorkout = "back";
+    String topTextString;
     Spinner dropDownWorkouts;
     ArrayAdapter<String> resultsLVadapter;
     ArrayAdapter<CharSequence> workoutAdapter;
@@ -40,9 +41,10 @@ public class WorkoutOverview extends AppCompatActivity {
         dropDownWorkouts.setAdapter(workoutAdapter);
 
         topText = findViewById(R.id.topText);
+        topTextString = "All " +chosenWorkout.toLowerCase() + " workouts";
         scrollView = findViewById(R.id.workoutView);
 
-        topText.setText("All " +chosenWorkout.toLowerCase() + " workouts");
+        topText.setText(topTextString);
 
         muscleGroups = dbHelper.getAllMuscleGroupWorkouts(chosenWorkout);
         resultsLVadapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, muscleGroups);
@@ -51,8 +53,9 @@ public class WorkoutOverview extends AppCompatActivity {
         dropDownWorkouts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String[] muscleArray = getResources().getStringArray(R.array.muscleGroups);
-                chosenWorkout = muscleArray[i];
+                chosenWorkout = dropDownWorkouts.getSelectedItem().toString();
+                topTextString = "All " +chosenWorkout.toLowerCase() + " workouts";
+                topText.setText(topTextString);
                 muscleGroups = dbHelper.getAllMuscleGroupWorkouts(chosenWorkout);
                 resultsLVadapter = new ArrayAdapter<>(WorkoutOverview.this, android.R.layout.simple_list_item_1, muscleGroups);
                 scrollView.setAdapter(resultsLVadapter);

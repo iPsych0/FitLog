@@ -173,7 +173,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         c.close();
 
-        Collections.sort(exerciseList, new Comparator<String>() {
+        exerciseList.sort(new Comparator<String>() {
             @Override
             public int compare(String first, String next) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
