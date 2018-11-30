@@ -1,5 +1,6 @@
 package com.example.daniel.fitlog.views;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -70,7 +71,12 @@ public class WorkoutOverviewScreen extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                List<Set> sets = dbHelper.getAllSetsByExerciseAndDate(chosenWorkout, adapterView.getItemAtPosition(i).toString());
+                Intent intent = new Intent(view.getContext(), WorkoutHistoryScreen.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("chosenWorkout",chosenWorkout);
+                bundle.putString("date",adapterView.getItemAtPosition(i).toString());
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 

@@ -52,4 +52,10 @@ public class Set {
     public void setWeight(int weight) {
         this.weight = weight;
     }
+
+    @Override
+    public String toString(){
+        return "'" + exercise + "': " + reps + "x " + weight + "kg";
+    }
+
 }
