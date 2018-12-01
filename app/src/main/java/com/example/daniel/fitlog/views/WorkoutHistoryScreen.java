@@ -3,6 +3,8 @@ package com.example.daniel.fitlog.views;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -15,6 +17,8 @@ import com.example.daniel.fitlog.utils.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WorkoutHistoryScreen extends AppCompatActivity {
 
@@ -24,7 +28,7 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
     private String chosenWorkout;
     private String selectedDate;
     private ListView setList;
-    private ArrayAdapter<String> setsAdapter;
+    private ArrayAdapter<Set> setsAdapter;
     private DBHelper dbHelper = new DBHelper(this, null, null, 1);
 
     @Override
@@ -57,11 +61,23 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
         List<Set> sets = dbHelper.getAllSetsByExerciseAndDate(chosenWorkout, selectedDate);
 
         // Order the sets by exercise
-        List<String> exercises = formatExercises(sets);
+//        List<String> exercises = formatExercises(sets);
 
         // Fill the ListView
-        setsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exercises);
+        setsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sets);
         setList.setAdapter(setsAdapter);
+
+        setList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Set selected = (Set)adapterView.getItemAtPosition(i);
+                dbHelper.deleteWorkout(selected.getId());
+                setsAdapter.clear();
+                setsAdapter.addAll(dbHelper.getAllSetsByExerciseAndDate(chosenWorkout, selectedDate));
+                setsAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
 
     }
 

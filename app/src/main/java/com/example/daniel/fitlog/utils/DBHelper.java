@@ -80,11 +80,6 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     public void addWorkout(String workout, String exercise, String reps, String weight, String date){
 
-        System.out.println(workout);
-        System.out.println(exercise);
-        System.out.println(reps);
-        System.out.println(weight);
-
         ContentValues content = new ContentValues();
         content.put(COLUMN_WORKOUT, workout);
         content.put(COLUMN_EXERCISE, exercise);
@@ -99,9 +94,9 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
      * Function to delete the rows from a given condition
      */
-    public void deleteWorkout(String workoutDate){
+    public void deleteWorkout(int id){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE * FROM " + TABLE_MUSCLES + " WHERE date "  + "=\"" + workoutDate + "\";");
+        db.delete(TABLE_MUSCLES, COLUMN_MUSCLES_ID + "=?", new String[]{String.valueOf(id)});
         db.close();
     }
 
@@ -136,7 +131,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // Move cursor over the query
         if (c.moveToFirst()){
             do{
-                Set set = new Set(c.getString(1), c.getString(2), c.getInt(3), c.getInt(4), c.getString(5));
+                Set set = new Set(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3), c.getInt(4), c.getString(5));
                 setList.add(set);
                 // ids = 0, workout = 1, exercise = 2, reps = 3, weight = 4, date = 5
             } while (c.moveToNext());

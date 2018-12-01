@@ -3,9 +3,10 @@ package com.example.daniel.fitlog.com.example.daniel.fitlog.models;
 public class Set {
 
     private String muscleGroup, exercise, date;
-    private int reps, weight;
+    private int id, reps, weight;
 
-    public Set(String muscleGroup, String exercise, int reps, int weight, String date) {
+    public Set(int id, String muscleGroup, String exercise, int reps, int weight, String date) {
+        this.id = id;
         this.muscleGroup = muscleGroup;
         this.exercise = exercise;
         this.date = date;
@@ -51,6 +52,14 @@ public class Set {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
