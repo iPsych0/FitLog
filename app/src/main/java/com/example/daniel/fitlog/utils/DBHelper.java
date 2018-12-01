@@ -92,6 +92,19 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /*
+     * Function to edit the workouts in the database
+     */
+    public void editWorkout(int id, String reps, String weight){
+
+        ContentValues content = new ContentValues();
+        content.put(COLUMN_REPS, reps);
+        content.put(COLUMN_WEIGHT, weight);
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(TABLE_MUSCLES, content, COLUMN_MUSCLES_ID + "=?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    /*
      * Function to delete the rows from a given condition
      */
     public void deleteWorkout(int id){

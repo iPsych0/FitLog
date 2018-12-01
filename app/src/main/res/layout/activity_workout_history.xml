@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".views.WorkoutHistoryScreen">
 
+    <Button
+        android:id="@+id/returnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="20dp"
+        android:background="#990a1d"
+        android:onClick="goBack"
+        android:text="RETURN"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setsList" />
+
     <TextView
         android:id="@+id/dateText"
         android:layout_width="wrap_content"
@@ -25,13 +42,12 @@
     <ListView
         android:id="@+id/setsList"
         android:layout_width="match_parent"
-        android:layout_height="462dp"
+        android:layout_height="392dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateText"
-        app:layout_constraintVertical_bias="0.0">
-    </ListView>
+        app:layout_constraintVertical_bias="0.0"></ListView>
 
 </android.support.constraint.ConstraintLayout>

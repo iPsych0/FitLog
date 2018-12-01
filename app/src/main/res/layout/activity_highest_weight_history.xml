@@ -15,7 +15,7 @@
     <ListView
         android:id="@+id/resultsLV"
         android:layout_width="match_parent"
-        android:layout_height="325dp"
+        android:layout_height="360dp"
         android:layout_below="@+id/muscleGroups"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
@@ -26,16 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_help"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/imageView"
-        android:background="#990a1d" />
+        android:layout_marginTop="15dp"
+        android:gravity="center" />
 
     <Button
         android:id="@+id/returnButton"
