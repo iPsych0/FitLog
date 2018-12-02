@@ -64,7 +64,7 @@ public class Set {
 
     @Override
     public String toString(){
-        return "'" + exercise + "': " + reps + "x " + weight + "kg";
+        return reps + "x " + weight + "kg";
     }
 
 }

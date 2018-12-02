@@ -2,7 +2,6 @@ package com.example.daniel.fitlog.views;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.preference.EditTextPreference;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,22 +9,18 @@ import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.daniel.fitlog.R;
 import com.example.daniel.fitlog.com.example.daniel.fitlog.models.Set;
 import com.example.daniel.fitlog.utils.DBHelper;
+import com.example.daniel.fitlog.utils.HistoryAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class WorkoutHistoryScreen extends AppCompatActivity {
 
@@ -35,7 +30,7 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
     private String chosenWorkout;
     private String selectedDate;
     private ListView setList;
-    private ArrayAdapter<Set> setsAdapter;
+    private HistoryAdapter setsAdapter;
     private DBHelper dbHelper = new DBHelper(this, null, null, 1);
     private EditText repsField, weightField;
 
@@ -68,11 +63,8 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
         // Get the sets from the database
         List<Set> sets = dbHelper.getAllSetsByExerciseAndDate(chosenWorkout, selectedDate);
 
-        // Order the sets by exercise
-//        List<String> exercises = formatExercises(sets);
-
         // Fill the ListView
-        setsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sets);
+        setsAdapter = new HistoryAdapter(this, sets);
         setList.setAdapter(setsAdapter);
 
         setList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -98,12 +90,12 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
                                 dialog.cancel();
                                 AlertDialog.Builder builder2 = new AlertDialog.Builder(WorkoutHistoryScreen.this);
                                 builder2
-                                        .setView(inflateWindow())
+                                        .setView(inflateDialogue())
                                         .setMessage("Please fill in the correct reps and weight:")
                                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int id) {
-                                                if(repsField.getText().toString().isEmpty() || weightField.getText().toString().isEmpty()){
+                                                if (repsField.getText().toString().isEmpty() || weightField.getText().toString().isEmpty()) {
                                                     Toast.makeText(WorkoutHistoryScreen.this, "Please fill in both reps and weight.", Toast.LENGTH_SHORT).show();
                                                     return;
                                                 }
@@ -140,9 +132,10 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
 
     /**
      * Inflates the two text fields to be populated in the dialogue
+     *
      * @return inflated layout to populate the dialogue
      */
-    private LinearLayout inflateWindow() {
+    private LinearLayout inflateDialogue() {
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -173,33 +166,7 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
         return layout;
     }
 
-    /**
-     * Groups the exercises together in a nice way
-     *
-     * @param sets the total amount of sets
-     * @return a sorted/grouped list of sets
-     */
-    private List<String> formatExercises(List<Set> sets) {
-        StringBuilder sb = new StringBuilder();
-        String lastChecked = sets.get(0).getExercise();
-        List<String> exercises = new ArrayList<>();
-
-        for (Set s : sets) {
-            if (s.getExercise().equalsIgnoreCase(lastChecked)) {
-                sb.append(s).append("\n");
-            } else {
-                exercises.add(sb.toString());
-                lastChecked = s.getExercise();
-                sb.setLength(0);
-                sb.append(s).append("\n");
-            }
-        }
-        exercises.add(sb.toString());
-
-        return exercises;
-    }
-
-    public void goBack(View view){
+    public void goBack(View view) {
         Intent intent = new Intent(view.getContext(), WorkoutOverviewScreen.class);
         startActivity(intent);
     }
