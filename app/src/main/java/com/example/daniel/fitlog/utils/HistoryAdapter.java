@@ -1,6 +1,7 @@
 package com.example.daniel.fitlog.utils;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,17 +11,24 @@ import com.example.daniel.fitlog.R;
 import com.example.daniel.fitlog.com.example.daniel.fitlog.models.Set;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class HistoryAdapter extends BaseAdapter {
 
     private Context context;
     private List<Set> sets;
+    private List<String> formattedExercises, formattedSets;
+    private DBHelper dbHelper;
 
     public HistoryAdapter(Context context, List<Set> sets) {
         this.context = context;
         this.sets = sets;
+        this.formattedExercises = formatExercises();
+        this.formattedSets = formatSets();
+        dbHelper = new DBHelper(context, null, null, 1);
     }
 
     @Override
@@ -29,8 +37,8 @@ public class HistoryAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return sets.get(i);
+    public Object getItem(int index) {
+        return formattedExercises.get(index);
     }
 
     @Override
@@ -45,9 +53,9 @@ public class HistoryAdapter extends BaseAdapter {
         TextView subText = v.findViewById(R.id.subTextList);
 
         try {
-            topText.setText(formatExercises().get(i));
-            subText.setText(formatSets().get(i));
-            v.setTag(sets.get(i).getId());
+            topText.setText(formattedExercises.get(i));
+            subText.setText(formattedSets.get(i));
+            v.setTag(i);
         } catch (Exception e) {
             e.printStackTrace();
         }

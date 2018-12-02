@@ -32,7 +32,6 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
     private ListView setList;
     private HistoryAdapter setsAdapter;
     private DBHelper dbHelper = new DBHelper(this, null, null, 1);
-    private EditText repsField, weightField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,103 +66,49 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
         setsAdapter = new HistoryAdapter(this, sets);
         setList.setAdapter(setsAdapter);
 
-        setList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        setList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(WorkoutHistoryScreen.this);
-                builder
-                        .setMessage("What would you like to do?")
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                Set selected = (Set) adapterView.getItemAtPosition(i);
-                                dbHelper.deleteWorkout(selected.getId());
-                                setsAdapter.clear();
-                                setsAdapter.addAll(dbHelper.getAllSetsByExerciseAndDate(chosenWorkout, selectedDate));
-                                setsAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton("Edit", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                AlertDialog.Builder builder2 = new AlertDialog.Builder(WorkoutHistoryScreen.this);
-                                builder2
-                                        .setView(inflateDialogue())
-                                        .setMessage("Please fill in the correct reps and weight:")
-                                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                if (repsField.getText().toString().isEmpty() || weightField.getText().toString().isEmpty()) {
-                                                    Toast.makeText(WorkoutHistoryScreen.this, "Please fill in both reps and weight.", Toast.LENGTH_SHORT).show();
-                                                    return;
-                                                }
-                                                Set selected = (Set) adapterView.getItemAtPosition(i);
-                                                dbHelper.editWorkout(selected.getId(), repsField.getText().toString(), weightField.getText().toString());
-                                                setsAdapter.clear();
-                                                setsAdapter.addAll(dbHelper.getAllSetsByExerciseAndDate(chosenWorkout, selectedDate));
-                                                setsAdapter.notifyDataSetChanged();
-                                                Toast.makeText(WorkoutHistoryScreen.this, "Updated set!", Toast.LENGTH_SHORT).show();
-                                            }
-                                        })
-                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-                                            }
-                                        })
-                                        .show();
-                            }
-                        })
-                        // Nothing is done when "No" is pressed
-                        .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
-                        .show();
-                return true;
+                String selected = (String)adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(WorkoutHistoryScreen.this, EditWorkoutScreen.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("exercise", selected);
+                bundle.putString("workout", chosenWorkout);
+                bundle.putString("date", selectedDate);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
-    }
+        setList.setOnItemLongClickListener((adapterView, view, i, l) -> {
 
-    /**
-     * Inflates the two text fields to be populated in the dialogue
-     *
-     * @return inflated layout to populate the dialogue
-     */
-    private LinearLayout inflateDialogue() {
-        LinearLayout layout = new LinearLayout(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(params);
+            String selected = (String)adapterView.getItemAtPosition(i);
+            AlertDialog.Builder builder = new AlertDialog.Builder(WorkoutHistoryScreen.this);
+            builder
+                    .setMessage("What would you like to do?")
+                    .setPositiveButton("Delete", (dialog, id) -> {
+                        dbHelper.deleteWorkout(selected, selectedDate);
+                        List<Set> temp = dbHelper.getAllSetsByExerciseAndDateAndExercise(chosenWorkout, selectedDate, selected);
+                        if(temp.size() > 0) {
+                            setsAdapter.clear();
+                            setsAdapter.addAll(temp);
+                            setsAdapter.notifyDataSetChanged();
+                        }else{
+                            Intent intent = new Intent(WorkoutHistoryScreen.this, WorkoutOverviewScreen.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("workout",chosenWorkout);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    })
+                    // Nothing is done when "No" is pressed
+                    .setNeutralButton("Cancel", (dialog, id) -> dialog.cancel())
+                    .show();
 
-        layout.setGravity(Gravity.CLIP_VERTICAL);
-        layout.setPadding(20, 20, 20, 20);
+            return true;
+        });
 
-        repsField = new EditText(this);
-        repsField.setHint("Reps:");
-        repsField.setInputType(InputType.TYPE_CLASS_NUMBER);
-        repsField.setPadding(20, 20, 20, 20);
-        repsField.setGravity(Gravity.CENTER);
-        repsField.setTextSize(20);
-
-        weightField = new EditText(this);
-        weightField.setHint("Weight:");
-        weightField.setInputType(InputType.TYPE_CLASS_NUMBER);
-        weightField.setPadding(20, 20, 20, 20);
-        weightField.setGravity(Gravity.CENTER);
-        weightField.setTextSize(20);
-
-        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv1Params.bottomMargin = 5;
-        layout.addView(repsField, tv1Params);
-        layout.addView(weightField, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        return layout;
     }
 
     public void goBack(View view) {

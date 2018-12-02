@@ -24,7 +24,8 @@
         <activity android:name=".views.HighestWeightGraphScreen" />
         <activity android:name=".views.SelectionScreen" />
         <activity android:name=".views.WorkoutOverviewScreen" />
-        <activity android:name=".views.WorkoutHistoryScreen"></activity>
+        <activity android:name=".views.WorkoutHistoryScreen" />
+        <activity android:name=".views.EditWorkoutScreen"></activity>
     </application>
 
 </manifest>

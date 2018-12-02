@@ -107,7 +107,16 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
      * Function to delete the rows from a given condition
      */
-    public void deleteWorkout(int id){
+    public void deleteWorkout(String exercise, String date){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_MUSCLES, COLUMN_EXERCISE + "=? AND " + COLUMN_DATE + "=?", new String[]{exercise, date});
+        db.close();
+    }
+
+    /*
+     * Function to delete the rows from a given condition
+     */
+    public void deleteSet(int id){
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_MUSCLES, COLUMN_MUSCLES_ID + "=?", new String[]{String.valueOf(id)});
         db.close();
@@ -138,6 +147,28 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<Set> setList = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_MUSCLES + " WHERE workout = '" + workout.toLowerCase() + "' AND date = '" + date + "';";
+
+        Cursor c = db.rawQuery(query, null);
+
+        // Move cursor over the query
+        if (c.moveToFirst()){
+            do{
+                Set set = new Set(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3), c.getInt(4), c.getString(5));
+                setList.add(set);
+                // ids = 0, workout = 1, exercise = 2, reps = 3, weight = 4, date = 5
+            } while (c.moveToNext());
+        }
+        // Close files to save memory and returns the list names
+        db.close();
+        c.close();
+
+        return setList;
+    }
+
+    public ArrayList<Set> getAllSetsByExerciseAndDateAndExercise(String workout, String date, String exercise){
+        ArrayList<Set> setList = new ArrayList<>();
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_MUSCLES + " WHERE workout = '" + workout.toLowerCase() + "' AND date = '" + date + "' AND exercise = '" + exercise +  "';";
 
         Cursor c = db.rawQuery(query, null);
 

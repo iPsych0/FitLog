@@ -11,7 +11,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.daniel.fitlog.R;
-import com.example.daniel.fitlog.com.example.daniel.fitlog.models.Set;
 import com.example.daniel.fitlog.utils.DBHelper;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class WorkoutOverviewScreen extends AppCompatActivity {
     ArrayAdapter<String> resultsLVadapter;
     ArrayAdapter<CharSequence> workoutAdapter;
     ListView scrollView;
-    ArrayList<String> muscleGroups = new ArrayList<>();
+    ArrayList<String> workoutDates = new ArrayList<>();
     TextView topText;
     DBHelper dbHelper = new DBHelper(this, null, null, 1);
 
@@ -40,14 +39,32 @@ public class WorkoutOverviewScreen extends AppCompatActivity {
         workoutAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropDownWorkouts.setAdapter(workoutAdapter);
 
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+
+        if(bundle != null){
+            chosenWorkout = bundle.getString("workout").toLowerCase();
+            String[] workouts = getResources().getStringArray(R.array.muscleGroups);
+            int index = 0;
+            for(String s : workouts){
+                if(s.equalsIgnoreCase(chosenWorkout)){
+                    break;
+                }else{
+                    index++;
+                }
+            }
+            dropDownWorkouts.setSelection(index);
+        }
+
+
         topText = findViewById(R.id.topText);
         topTextString = "All " +chosenWorkout.toLowerCase() + " workouts";
         scrollView = findViewById(R.id.workoutView);
 
         topText.setText(topTextString);
 
-        muscleGroups = dbHelper.getAllMuscleGroupWorkouts(chosenWorkout);
-        resultsLVadapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, muscleGroups);
+        workoutDates = dbHelper.getAllMuscleGroupWorkouts(chosenWorkout);
+        resultsLVadapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, workoutDates);
         scrollView.setAdapter(resultsLVadapter);
 
         dropDownWorkouts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -56,8 +73,8 @@ public class WorkoutOverviewScreen extends AppCompatActivity {
                 chosenWorkout = dropDownWorkouts.getSelectedItem().toString();
                 topTextString = "All " +chosenWorkout.toLowerCase() + " workouts";
                 topText.setText(topTextString);
-                muscleGroups = dbHelper.getAllMuscleGroupWorkouts(chosenWorkout);
-                resultsLVadapter = new ArrayAdapter<>(WorkoutOverviewScreen.this, android.R.layout.simple_list_item_1, muscleGroups);
+                workoutDates = dbHelper.getAllMuscleGroupWorkouts(chosenWorkout);
+                resultsLVadapter = new ArrayAdapter<>(WorkoutOverviewScreen.this, android.R.layout.simple_list_item_1, workoutDates);
                 scrollView.setAdapter(resultsLVadapter);
             }
 

@@ -320,4 +320,21 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
     public void setSelectedDate(LocalDate selection) {
         this.selectedDate = selection;
     }
+
+    @Override
+    public void onBackPressed() {
+        // Open dialogue to confirm return to home
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddExercisesScreen.this);
+        builder
+                .setMessage("Are you finished with your workout?")
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    Intent homeScreen = new Intent(AddExercisesScreen.this, HomeScreen.class);
+                    startActivity(homeScreen);
+                    finish();
+                    super.onBackPressed();
+                })
+                // Nothing is done when "No" is pressed
+                .setNegativeButton("No", (dialog, id) -> dialog.cancel())
+                .show();
+    }
 }
