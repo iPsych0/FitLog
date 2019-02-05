@@ -31,4 +31,9 @@ public class HomeScreen extends AppCompatActivity {
         Intent workoutHistory = new Intent(view.getContext(), SelectionScreen.class);
         startActivity(workoutHistory);
     }
+
+    public void startOneRepMax(View view){
+        Intent oneRepMaxScreen = new Intent(view.getContext(), OneRepMaxScreen.class);
+        startActivity(oneRepMaxScreen);
+    }
 }

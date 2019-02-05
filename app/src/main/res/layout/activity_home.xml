@@ -50,4 +50,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newWorkoutButton" />
+
+    <Button
+        android:id="@+id/oneRepMaxButton"
+        android:layout_width="309dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="#990a1d"
+        android:onClick="startOneRepMax"
+        android:text="Calculate One-Rep-Max"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workoutHistoryButton" />
+
 </android.support.constraint.ConstraintLayout>
