@@ -143,7 +143,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return exerciseList;
     }
 
-    public ArrayList<Set> getAllSetsByExerciseAndDate(String workout, String date){
+    public ArrayList<Set> getAllSetsByWorkoutAndDate(String workout, String date){
         ArrayList<Set> setList = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_MUSCLES + " WHERE workout = '" + workout.toLowerCase() + "' AND date = '" + date + "';";
@@ -165,7 +165,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return setList;
     }
 
-    public ArrayList<Set> getAllSetsByExerciseAndDateAndExercise(String workout, String date, String exercise){
+    public ArrayList<Set> getAllSetsByWorkoutAndDateAndExercise(String workout, String date, String exercise){
         ArrayList<Set> setList = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_MUSCLES + " WHERE workout = '" + workout.toLowerCase() + "' AND date = '" + date + "' AND exercise = '" + exercise +  "';";

@@ -26,6 +26,10 @@ public class HistoryAdapter extends BaseAdapter {
     public HistoryAdapter(Context context, List<Set> sets) {
         this.context = context;
         this.sets = sets;
+
+        // Sort the sets by exercise name
+        this.sets.sort((o1, o2) -> o1.getExercise().compareToIgnoreCase(o2.getExercise()));
+
         this.formattedExercises = formatExercises();
         this.formattedSets = formatSets();
         dbHelper = new DBHelper(context, null, null, 1);

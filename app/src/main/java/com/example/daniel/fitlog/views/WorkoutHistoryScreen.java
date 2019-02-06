@@ -1,16 +1,11 @@
 package com.example.daniel.fitlog.views;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +55,7 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
         dateText.setText(topText);
 
         // Get the sets from the database
-        List<Set> sets = dbHelper.getAllSetsByExerciseAndDate(chosenWorkout, selectedDate);
+        List<Set> sets = dbHelper.getAllSetsByWorkoutAndDate(chosenWorkout, selectedDate);
 
         // Fill the ListView
         setsAdapter = new HistoryAdapter(this, sets);
@@ -89,7 +84,7 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
                     .setMessage("What would you like to do?")
                     .setPositiveButton("Delete", (dialog, id) -> {
                         dbHelper.deleteWorkout(selected, selectedDate);
-                        List<Set> temp = dbHelper.getAllSetsByExerciseAndDateAndExercise(chosenWorkout, selectedDate, selected);
+                        List<Set> temp = dbHelper.getAllSetsByWorkoutAndDateAndExercise(chosenWorkout, selectedDate, selected);
                         if(temp.size() > 0) {
                             setsAdapter.clear();
                             setsAdapter.addAll(temp);
@@ -113,6 +108,10 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
 
     public void goBack(View view) {
         Intent intent = new Intent(view.getContext(), WorkoutOverviewScreen.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("workout", chosenWorkout);
+        intent.putExtras(bundle);
+        finish();
         startActivity(intent);
     }
 }

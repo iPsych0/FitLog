@@ -102,6 +102,7 @@ public class WorkoutOverviewScreen extends AppCompatActivity {
 
     public void goBack(View view) {
         Intent intent = new Intent(view.getContext(), SelectionScreen.class);
+        finish();
         startActivity(intent);
     }
 }

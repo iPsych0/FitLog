@@ -55,7 +55,7 @@ public class EditWorkoutScreen extends AppCompatActivity {
         }
 
         // Get the sets from the database
-        List<Set> sets = dbHelper.getAllSetsByExerciseAndDateAndExercise(chosenWorkout, date, selectedExercise);
+        List<Set> sets = dbHelper.getAllSetsByWorkoutAndDateAndExercise(chosenWorkout, date, selectedExercise);
         setsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sets);
         exerciseList.setAdapter(setsAdapter);
 
@@ -72,7 +72,7 @@ public class EditWorkoutScreen extends AppCompatActivity {
                                 Set selected = (Set)adapterView.getItemAtPosition(i);
                                 dbHelper.deleteSet(selected.getId());
                                 setsAdapter.clear();
-                                setsAdapter.addAll(dbHelper.getAllSetsByExerciseAndDateAndExercise(chosenWorkout, date, selectedExercise));
+                                setsAdapter.addAll(dbHelper.getAllSetsByWorkoutAndDateAndExercise(chosenWorkout, date, selectedExercise));
                                 setsAdapter.notifyDataSetChanged();
                             }
                         })
@@ -95,7 +95,7 @@ public class EditWorkoutScreen extends AppCompatActivity {
                                                 }
                                                 dbHelper.editWorkout(selected.getId(), repsField.getText().toString(), weightField.getText().toString());
                                                 setsAdapter.clear();
-                                                setsAdapter.addAll(dbHelper.getAllSetsByExerciseAndDateAndExercise(chosenWorkout, date, selectedExercise));
+                                                setsAdapter.addAll(dbHelper.getAllSetsByWorkoutAndDateAndExercise(chosenWorkout, date, selectedExercise));
                                                 setsAdapter.notifyDataSetChanged();
                                                 Toast.makeText(EditWorkoutScreen.this, "Updated set!", Toast.LENGTH_SHORT).show();
                                             }
@@ -158,5 +158,18 @@ public class EditWorkoutScreen extends AppCompatActivity {
         layout.addView(weightField, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         return layout;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent historyScreen = new Intent(EditWorkoutScreen.this, WorkoutHistoryScreen.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("chosenWorkout", chosenWorkout);
+        bundle.putString("date", date);
+        historyScreen.putExtras(bundle);
+
+        startActivity(historyScreen);
+        super.onBackPressed();
     }
 }
