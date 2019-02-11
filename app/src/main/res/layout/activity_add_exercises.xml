@@ -11,86 +11,77 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.daniel.fitlog.views.AddExercisesScreen">
 
-    <Spinner
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/missingExerciseButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:id="@+id/muscleGroups"
-        android:spinnerMode="dropdown" />
+        android:layout_marginTop="96dp"
+        android:backgroundTint="#990a1d"
+        android:onClick="addMissingExercise"
+        android:text="Add missing exercise"
+        android:textColor="@android:color/white" />
 
     <Spinner
+        android:id="@+id/muscleGroups"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
+
+    <Spinner
+        android:id="@+id/exercises"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:layout_below="@+id/muscleGroups"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        android:id="@+id/exercises"
         android:spinnerMode="dropdown" />
 
     <EditText
-        android:layout_height="wrap_content"
-        android:hint="@string/weight"
-        android:ems="10"
         android:id="@+id/weight"
-        android:inputType="number"
         android:layout_width="100dp"
-        android:layout_alignBaseline="@+id/reps"
-        android:layout_alignBottom="@+id/reps"
-        android:layout_toRightOf="@+id/dateButton"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/dateButton"
         android:layout_toEndOf="@+id/dateButton"
+        android:ems="10"
+        android:hint="@string/weight"
+        android:inputType="number"
         android:textAlignment="center" />
 
     <Button
-        android:text="SELECT DATE"
+        android:id="@+id/dateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/dateButton"
-        android:layout_below="@+id/exercises"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="159dp"
         android:backgroundTint="#990a1d"
+        android:text="SELECT DATE"
         android:textColor="@android:color/white" />
 
     <EditText
-        android:layout_height="wrap_content"
-        android:hint="@string/reps"
-        android:ems="10"
         android:id="@+id/reps"
-        android:inputType="number"
         android:layout_width="80dp"
-        android:layout_below="@+id/dateButton"
-        android:layout_toLeftOf="@+id/dateButton"
-        android:layout_toStartOf="@+id/dateButton"
-        android:textAlignment="center" />
-
-    <ImageView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_help"
-        android:id="@+id/helpButton"
-        android:elevation="1dp"
-        android:background="#990a1d"
-        android:onClick="helpUser"
-        android:layout_above="@+id/addButton"
-        android:layout_toRightOf="@+id/reps"
-        android:layout_toEndOf="@+id/reps"
-        android:layout_marginLeft="29dp"
-        android:layout_marginStart="29dp" />
+        android:layout_alignTop="@+id/weight"
+        android:layout_toStartOf="@+id/dateButton"
+        android:ems="10"
+        android:hint="@string/reps"
+        android:inputType="number"
+        android:textAlignment="center" />
 
 
     <Button
-        android:text="ADD"
-        android:layout_height="wrap_content"
         android:id="@+id/addButton"
-        android:onClick="addExercisesToDB"
         android:layout_width="90dp"
-        android:layout_below="@+id/reps"
-        android:layout_toRightOf="@+id/reps"
-        android:layout_toEndOf="@+id/reps"
-        android:layout_marginTop="13dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:backgroundTint="#990a1d"
+        android:onClick="addExercisesToDB"
+        android:text="ADD"
         android:textColor="@android:color/white" />
 
     <RadioGroup
@@ -144,14 +135,14 @@
         android:layout_marginTop="40dp" />
 
     <Button
-        android:text="return home"
+        android:id="@+id/doneButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/doneButton"
-        android:onClick="finishWorkout"
-        android:backgroundTint="#990a1d"
-        android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="#990a1d"
+        android:onClick="goBack"
+        android:text="return home"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

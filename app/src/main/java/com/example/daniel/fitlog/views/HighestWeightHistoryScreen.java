@@ -26,7 +26,6 @@ public class HighestWeightHistoryScreen extends AppCompatActivity {
     private ArrayAdapter<String> resultsLVadapter;
     private ArrayList<String> allWorkouts;
     private DBHelper dbHelper;
-    private ImageView helpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +34,6 @@ public class HighestWeightHistoryScreen extends AppCompatActivity {
 
         dbHelper = new DBHelper(this, null, null, 1);
         resultsLV = findViewById(R.id.resultsLV);
-        helpButton = findViewById(R.id.helpButton);
 
         muscleGroups = findViewById(R.id.muscleGroups);
         muscleGroupAdapter = ArrayAdapter.createFromResource(this, R.array.muscleGroups,

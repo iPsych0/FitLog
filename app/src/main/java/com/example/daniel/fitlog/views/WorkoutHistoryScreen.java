@@ -51,7 +51,7 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
         }
 
         // Set the text at the top to the chosen values
-        String topText = "All " + chosenWorkout + " exercises on: " + selectedDate;
+        String topText = "All " + chosenWorkout + " chest on: " + selectedDate;
         dateText.setText(topText);
 
         // Get the sets from the database
