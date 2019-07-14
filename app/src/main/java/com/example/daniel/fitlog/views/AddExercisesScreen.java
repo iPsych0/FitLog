@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -18,10 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,8 +37,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class AddExercisesScreen extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -55,23 +49,17 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
     private String muscleGroupSelected;
     private String exerciseSelected;
     private Button missingExerciseButton;
+    private Button currentWorkoutButton;
     private DBHelper dbHelper;
     private LocalDate selectedDate;
-    private RadioButton button30;
-    private RadioButton button60;
-    private RadioButton button90;
-    private RadioGroup buttonGroup;
-    private int checked;
-    private ImageView stopWatch;
-    private TextView countdownTimer;
     private Calendar c;
-    private int timer;
-    private Timer t;
-    private Vibrator vib;
     private ArrayAdapter<CharSequence> muscleGroupAdapter;
     private ArrayAdapter<CharSequence> exerciseAdapter;
     private List<CharSequence> chestList, backList, bicepsList, tricepsList, shouldersList, legsList, absList;
     private EditText exerciseInput;
+    private TextView setsTV;
+    private static final String DEFAULT_SETS_MESSAGE = "Current sets:\n";
+    private StringBuilder currentSets = new StringBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +76,8 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
 
         listenForExerciseChanges();
 
-        checkStopWatch();
+        setsTV.setText(DEFAULT_SETS_MESSAGE + currentSets.toString());
+
     }
 
     /**
@@ -115,6 +104,8 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
                             exercises.getSelectedItem().toString(), reps.getText().toString(),
                             weight.getText().toString(), getSelectedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
+                    updateCurrentSets();
+
                     Toast.makeText(AddExercisesScreen.this, "You did " + reps.getText().toString() + " reps of " +
                             weight.getText().toString() + "kg of " + exercises.getSelectedItem().toString() + "s", Toast.LENGTH_LONG).show();
                 })
@@ -122,6 +113,15 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
                 // Nothing is done when "No" is pressed
                 .setNegativeButton("No", (dialog, id) -> dialog.cancel())
                 .show();
+    }
+
+    private void updateCurrentSets() {
+        List<Set> sets = dbHelper.getAllSetsByWorkoutAndDateAndExercise(muscleGroupSelected, selectedDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")), exerciseSelected);
+        currentSets.delete(0, currentSets.length());
+        for(Set s : sets){
+            currentSets.append(s.getReps()).append("x ").append(s.getWeight()).append("kg\n");
+        }
+        setsTV.setText(DEFAULT_SETS_MESSAGE + currentSets.toString());
     }
 
     /**
@@ -137,6 +137,7 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
         LocalDate date = LocalDate.of(year, month, dayOfMonth);
         setSelectedDate(date);
         dateButton.setText(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        updateCurrentSets();
     }
 
     /*
@@ -148,7 +149,6 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
         dbHelper = new DBHelper(this, null, null, 1);
 
         // Get all UI elements
-        vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         muscleGroups = (Spinner) findViewById(R.id.muscleGroups);
         exercises = (Spinner) findViewById(R.id.exercises);
         missingExerciseButton = findViewById(R.id.missingExerciseButton);
@@ -156,12 +156,7 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
         weight = (EditText) findViewById(R.id.weight);
         dateButton = (Button) findViewById(R.id.dateButton);
         addButton = (Button) findViewById(R.id.addButton);
-        button30 = (RadioButton) findViewById(R.id.button30);
-        button60 = (RadioButton) findViewById(R.id.button60);
-        button90 = (RadioButton) findViewById(R.id.button90);
-        buttonGroup = (RadioGroup) findViewById(R.id.buttonGroup);
-        stopWatch = (ImageView) findViewById(R.id.stopWatch);
-        countdownTimer = (TextView) findViewById(R.id.countdownTimer);
+        setsTV = findViewById(R.id.setsTV);
 
         // Set the calendar to today's date by default
         c = Calendar.getInstance();
@@ -173,6 +168,12 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
                 android.R.layout.simple_spinner_item);
         muscleGroupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         muscleGroups.setAdapter(muscleGroupAdapter);
+        muscleGroupSelected = muscleGroups.getSelectedItem().toString();
+
+        exerciseAdapter = new ArrayAdapter<>(AddExercisesScreen.this, android.R.layout.simple_spinner_dropdown_item, backList);
+        exercises.setAdapter(exerciseAdapter);
+        exerciseSelected = exercises.getSelectedItem().toString();
+
     }
 
     private void listenForMuscleGroupChanges() {
@@ -182,22 +183,30 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
                 muscleGroupSelected = parent.getItemAtPosition(position).toString();
 
                 if (muscleGroupSelected.equals("Back")) {
+                    backList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                     exerciseAdapter = new ArrayAdapter<>(AddExercisesScreen.this, android.R.layout.simple_spinner_dropdown_item, backList);
                 } else if (muscleGroupSelected.equals("Chest")) {
+                    chestList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                     exerciseAdapter = new ArrayAdapter<>(AddExercisesScreen.this, android.R.layout.simple_spinner_dropdown_item, chestList);
                 } else if (muscleGroupSelected.equals("Legs")) {
+                    legsList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                     exerciseAdapter = new ArrayAdapter<>(AddExercisesScreen.this, android.R.layout.simple_spinner_dropdown_item, legsList);
                 } else if (muscleGroupSelected.equals("Shoulders")) {
+                    shouldersList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                     exerciseAdapter = new ArrayAdapter<>(AddExercisesScreen.this, android.R.layout.simple_spinner_dropdown_item, shouldersList);
                 } else if (muscleGroupSelected.equals("Biceps")) {
+                    bicepsList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                     exerciseAdapter = new ArrayAdapter<>(AddExercisesScreen.this, android.R.layout.simple_spinner_dropdown_item, bicepsList);
                 } else if (muscleGroupSelected.equals("Triceps")) {
+                    tricepsList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                     exerciseAdapter = new ArrayAdapter<>(AddExercisesScreen.this, android.R.layout.simple_spinner_dropdown_item, tricepsList);
                 } else if (muscleGroupSelected.equals("Abs")) {
+                    absList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                     exerciseAdapter = new ArrayAdapter<>(AddExercisesScreen.this, android.R.layout.simple_spinner_dropdown_item, absList);
                 }
 
                 exercises.setAdapter(exerciseAdapter);
+                updateCurrentSets();
             }
 
             @Override
@@ -224,56 +233,54 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
     private void listenForExerciseChanges() {
 
         final Handler actionHandler = new Handler();
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog.Builder builder2 = new AlertDialog.Builder(AddExercisesScreen.this);
-                builder2
-                        .setMessage("Are you sure you want to remove this exercise?")
-                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                switch (muscleGroupSelected.toLowerCase()){
-                                    case "back":
-                                        backList.removeIf((o1) -> o1.equals(exerciseSelected));
-                                        updateList(backList);
-                                        break;
-                                    case "chest":
-                                        chestList.removeIf((o1) -> o1.equals(exerciseSelected));
-                                        updateList(chestList);
-                                        break;
-                                    case "biceps":
-                                        bicepsList.removeIf((o1) -> o1.equals(exerciseSelected));
-                                        updateList(bicepsList);
-                                        break;
-                                    case "triceps":
-                                        tricepsList.removeIf((o1) -> o1.equals(exerciseSelected));
-                                        updateList(tricepsList);
-                                        break;
-                                    case "shoulders":
-                                        shouldersList.removeIf((o1) -> o1.equals(exerciseSelected));
-                                        updateList(shouldersList);
-                                        break;
-                                    case "legs":
-                                        legsList.removeIf((o1) -> o1.equals(exerciseSelected));
-                                        updateList(legsList);
-                                        break;
-                                    case "abs":
-                                        absList.removeIf((o1) -> o1.equals(exerciseSelected));
-                                        updateList(absList);
-                                        break;
-                                }
-                                exerciseAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
-                        .show();
-            }
+        final Runnable runnable = () -> {
+            AlertDialog.Builder builder2 = new AlertDialog.Builder(AddExercisesScreen.this);
+            builder2
+                    .setMessage("Are you sure you want to remove this exercise?")
+                    .setPositiveButton("Delete", (dialog, id) -> {
+                        switch (muscleGroupSelected.toLowerCase()) {
+                            case "back":
+                                backList.removeIf((o1) -> o1.equals(exerciseSelected));
+                                updateList(backList);
+                                break;
+                            case "chest":
+                                chestList.removeIf((o1) -> o1.equals(exerciseSelected));
+                                updateList(chestList);
+                                break;
+                            case "biceps":
+                                bicepsList.removeIf((o1) -> o1.equals(exerciseSelected));
+                                updateList(bicepsList);
+                                break;
+                            case "triceps":
+                                tricepsList.removeIf((o1) -> o1.equals(exerciseSelected));
+                                updateList(tricepsList);
+                                break;
+                            case "shoulders":
+                                shouldersList.removeIf((o1) -> o1.equals(exerciseSelected));
+                                updateList(shouldersList);
+                                break;
+                            case "legs":
+                                legsList.removeIf((o1) -> o1.equals(exerciseSelected));
+                                updateList(legsList);
+                                break;
+                            case "abs":
+                                absList.removeIf((o1) -> o1.equals(exerciseSelected));
+                                updateList(absList);
+                                break;
+                        }
+                        exerciseAdapter.notifyDataSetChanged();
+                    })
+                    .setNegativeButton("Edit", (dialog, id) -> {
+                        editExerciseName(this.getCurrentFocus());
+                        exerciseAdapter.notifyDataSetChanged();
+                    })
+                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
         };
 
         exercises.setOnTouchListener(new View.OnTouchListener() {
@@ -281,7 +288,7 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     actionHandler.postDelayed(runnable, 1000);
-                } else if(event.getAction() == MotionEvent.ACTION_UP){
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     actionHandler.removeCallbacks(runnable);
                 }
                 return false;
@@ -294,6 +301,7 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 exerciseSelected = parent.getItemAtPosition(position).toString();
+                updateCurrentSets();
             }
 
             @Override
@@ -301,68 +309,7 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
 
             }
         });
-    }
 
-    private void checkStopWatch() {
-        // Change the timer cooldown
-        buttonGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            checked = buttonGroup.indexOfChild(findViewById(checkedId));
-            switch (checked) {
-                case 0:
-                    countdownTimer.setText("30");
-                    timer = Integer.parseInt(countdownTimer.getText().toString());
-                    if (t != null) {
-                        t.cancel();
-                    }
-                    break;
-                case 1:
-                    countdownTimer.setText("60");
-                    timer = Integer.parseInt(countdownTimer.getText().toString());
-                    if (t != null) {
-                        t.cancel();
-                    }
-                    break;
-                case 2:
-                    countdownTimer.setText("90");
-                    timer = Integer.parseInt(countdownTimer.getText().toString());
-                    if (t != null) {
-                        t.cancel();
-                    }
-                    break;
-                default:
-                    countdownTimer.setText("");
-                    timer = 0;
-                    if (t != null) {
-                        t.cancel();
-                    }
-                    break;
-            }
-        });
-
-        countdownTimer.setOnClickListener((View v) -> {
-            if (countdownTimer.getText().toString().isEmpty()) {
-                return;
-            }
-            if (t != null) {
-                t.cancel();
-                t = null;
-                return;
-            }
-
-            t = new Timer();
-            t.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    if (timer <= 1) {
-                        vib.vibrate(2000);
-                        t.cancel();
-                    }
-                    timer--;
-                    runOnUiThread(() -> countdownTimer.setText(String.valueOf(timer)));
-
-                }
-            }, 1000, 1000);
-        });
     }
 
     public LocalDate getSelectedDate() {
@@ -401,10 +348,10 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
         return layout;
     }
 
-    private void updateList(List<CharSequence> list, String newExercise){
-        list.add(newExercise);
+    private void renameListEntry(List<CharSequence> list, String oldName, String newExercise) {
+        list.set(list.indexOf(oldName), newExercise);
         StringBuilder sb = new StringBuilder();
-        for(CharSequence s : list){
+        for (CharSequence s : list) {
             sb.append(s).append("\n");
         }
 
@@ -416,14 +363,16 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(fileContents.getBytes());
             outputStream.close();
+            updateCurrentSets();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void updateList(List<CharSequence> list){
+    private void updateList(List<CharSequence> list, String newExercise) {
+        list.add(newExercise);
         StringBuilder sb = new StringBuilder();
-        for(CharSequence s : list){
+        for (CharSequence s : list) {
             sb.append(s).append("\n");
         }
 
@@ -435,6 +384,27 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(fileContents.getBytes());
             outputStream.close();
+            updateCurrentSets();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateList(List<CharSequence> list) {
+        StringBuilder sb = new StringBuilder();
+        for (CharSequence s : list) {
+            sb.append(s).append("\n");
+        }
+
+        String filename = muscleGroupSelected.toLowerCase() + ".txt";
+        String fileContents = sb.toString();
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(fileContents.getBytes());
+            outputStream.close();
+            updateCurrentSets();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -458,27 +428,34 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
                         exerciseAdapter.notifyDataSetChanged();
                         Toast.makeText(AddExercisesScreen.this, "Added " + exerciseInput.getText().toString(), Toast.LENGTH_SHORT).show();
 
-                        switch (muscleGroupSelected.toLowerCase()){
+                        switch (muscleGroupSelected.toLowerCase()) {
                             case "back":
                                 updateList(backList, newExercise);
+                                backList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                                 break;
                             case "chest":
                                 updateList(chestList, newExercise);
+                                chestList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                                 break;
                             case "biceps":
                                 updateList(bicepsList, newExercise);
+                                bicepsList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                                 break;
                             case "triceps":
                                 updateList(tricepsList, newExercise);
+                                tricepsList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                                 break;
                             case "shoulders":
                                 updateList(shouldersList, newExercise);
+                                shouldersList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                                 break;
                             case "legs":
                                 updateList(legsList, newExercise);
+                                legsList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                                 break;
                             case "abs":
                                 updateList(absList, newExercise);
+                                absList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
                                 break;
                         }
                     }
@@ -492,12 +469,73 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
                 .show();
     }
 
-    private boolean fileExists(String fname){
+    public void editExerciseName(View view) {
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(AddExercisesScreen.this);
+        builder2
+                .setView(inflateDialogue())
+                .setMessage("Fill in the correct name of the exercise:")
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (exerciseInput.getText().toString().isEmpty()) {
+                            Toast.makeText(AddExercisesScreen.this, "Please fill in the new exercise name!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        String newExercise = exerciseInput.getText().toString();
+                        exerciseAdapter.notifyDataSetChanged();
+                        Toast.makeText(AddExercisesScreen.this, "Renamed '" + exerciseSelected + "' to: " + exerciseInput.getText().toString(), Toast.LENGTH_SHORT).show();
+                        updateCurrentSets();
+
+                        dbHelper.editExercise(exerciseSelected, newExercise);
+
+                        switch (muscleGroupSelected.toLowerCase()) {
+                            case "back":
+                                renameListEntry(backList, exerciseSelected, newExercise);
+                                backList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
+                                break;
+                            case "chest":
+                                renameListEntry(chestList, exerciseSelected, newExercise);
+                                chestList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
+                                break;
+                            case "biceps":
+                                renameListEntry(bicepsList, exerciseSelected, newExercise);
+                                bicepsList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
+                                break;
+                            case "triceps":
+                                renameListEntry(tricepsList, exerciseSelected, newExercise);
+                                tricepsList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
+                                break;
+                            case "shoulders":
+                                renameListEntry(shouldersList, exerciseSelected, newExercise);
+                                shouldersList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
+                                break;
+                            case "legs":
+                                renameListEntry(legsList, exerciseSelected, newExercise);
+                                legsList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
+                                break;
+                            case "abs":
+                                renameListEntry(absList, exerciseSelected, newExercise);
+                                absList.sort((o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));
+                                break;
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+    }
+
+    private boolean fileExists(String fname) {
         File file = getBaseContext().getFileStreamPath(fname);
         return file.exists();
     }
 
-    private void loadConfigurations(){
+    private void loadConfigurations() {
         chestList = new ArrayList<>();
         backList = new ArrayList<>();
         bicepsList = new ArrayList<>();
@@ -507,7 +545,7 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
         legsList = new ArrayList<>();
 
         // Chest
-        if(!fileExists("chest.txt")) {
+        if (!fileExists("chest.txt")) {
             String filename = "chest.txt";
             String fileContents = "Flat Bench Press\n" +
                     "Incline Bench Press\n" +
@@ -541,12 +579,12 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             while ((line = bufferedReader.readLine()) != null) {
                 chestList.add(line);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Back
-        if(!fileExists("back.txt")) {
+        if (!fileExists("back.txt")) {
             String filename = "back.txt";
             String fileContents = "Close Grip Lat Pulldown\n" +
                     "Wide Grip Lat Pulldown\n" +
@@ -575,12 +613,12 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             while ((line = bufferedReader.readLine()) != null) {
                 backList.add(line);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Legs
-        if(!fileExists("legs.txt")) {
+        if (!fileExists("legs.txt")) {
             String filename = "legs.txt";
             String fileContents = "Back Squat\n" +
                     "Front Squat\n" +
@@ -607,12 +645,12 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             while ((line = bufferedReader.readLine()) != null) {
                 legsList.add(line);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Biceps
-        if(!fileExists("biceps.txt")) {
+        if (!fileExists("biceps.txt")) {
             String filename = "biceps.txt";
             String fileContents = "Dumbell Hammer Curl\n" +
                     "Dumbell Preacher Curl\n" +
@@ -639,12 +677,12 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             while ((line = bufferedReader.readLine()) != null) {
                 bicepsList.add(line);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Triceps
-        if(!fileExists("triceps.txt")) {
+        if (!fileExists("triceps.txt")) {
             String filename = "triceps.txt";
             String fileContents = "Close Grip Pushdown\n" +
                     "Rope Pushdown\n" +
@@ -673,12 +711,12 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             while ((line = bufferedReader.readLine()) != null) {
                 tricepsList.add(line);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Shoulders
-        if(!fileExists("shoulders.txt")) {
+        if (!fileExists("shoulders.txt")) {
             String filename = "shoulders.txt";
             String fileContents = "Overhead Dumbell Press\n" +
                     "Overhead Barbell Press\n" +
@@ -708,12 +746,12 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             while ((line = bufferedReader.readLine()) != null) {
                 shouldersList.add(line);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Abs
-        if(!fileExists("abs.txt")) {
+        if (!fileExists("abs.txt")) {
             String filename = "abs.txt";
             String fileContents = "Sit ups\n" +
                     "Crunches";
@@ -736,7 +774,7 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
             while ((line = bufferedReader.readLine()) != null) {
                 absList.add(line);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -747,5 +785,15 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
         startActivity(intent);
         super.onBackPressed();
 
+    }
+
+    public void viewCurrentWorkout(View view) {
+        Intent intent = new Intent(view.getContext(), WorkoutHistoryScreen.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("chosenWorkout", muscleGroupSelected);
+        bundle.putString("date", selectedDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        bundle.putString("lastScreen", "addExercises");
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

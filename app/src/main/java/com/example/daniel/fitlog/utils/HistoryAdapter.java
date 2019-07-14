@@ -85,6 +85,9 @@ public class HistoryAdapter extends BaseAdapter {
      * @return a sorted/grouped list of sets
      */
     private List<String> formatSets() {
+        if(sets.isEmpty()){
+            return new ArrayList<>();
+        }
         StringBuilder sb = new StringBuilder();
         String lastChecked = sets.get(0).getExercise();
         List<String> sets = new ArrayList<>();

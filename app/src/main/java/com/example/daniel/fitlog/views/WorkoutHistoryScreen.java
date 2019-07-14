@@ -27,6 +27,7 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
     private ListView setList;
     private HistoryAdapter setsAdapter;
     private DBHelper dbHelper = new DBHelper(this, null, null, 1);
+    private String lastScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +46,14 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
         if (bundle != null) {
             chosenWorkout = bundle.getString("chosenWorkout");
             selectedDate = bundle.getString("date");
+            lastScreen = bundle.getString("lastScreen");
         } else {
             Toast.makeText(this, "Could not retrieve the selected workout from the previous screen. Please retry.", Toast.LENGTH_LONG).show();
             return;
         }
 
         // Set the text at the top to the chosen values
-        String topText = "All " + chosenWorkout + " chest on: " + selectedDate;
+        String topText = "All " + chosenWorkout + " exercises on: " + selectedDate;
         dateText.setText(topText);
 
         // Get the sets from the database
@@ -107,9 +109,18 @@ public class WorkoutHistoryScreen extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        Intent intent = new Intent(view.getContext(), WorkoutOverviewScreen.class);
         Bundle bundle = new Bundle();
         bundle.putString("workout", chosenWorkout);
+
+        // By default, go back to workout overview, unless we came from addExercises
+        Class screen = WorkoutOverviewScreen.class;
+        if(lastScreen != null){
+            if(lastScreen.equalsIgnoreCase("addExercises")){
+                screen = AddExercisesScreen.class;
+            }
+        }
+        Intent intent = new Intent(view.getContext(), screen);
+
         intent.putExtras(bundle);
         finish();
         startActivity(intent);

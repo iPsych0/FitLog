@@ -43,7 +43,7 @@ public class WorkoutOverviewScreen extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
 
         if(bundle != null){
-            chosenWorkout = bundle.getString("workout").toLowerCase();
+            chosenWorkout = bundle.getString("workout");
             String[] workouts = getResources().getStringArray(R.array.muscleGroups);
             int index = 0;
             for(String s : workouts){
@@ -71,7 +71,7 @@ public class WorkoutOverviewScreen extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 chosenWorkout = dropDownWorkouts.getSelectedItem().toString();
-                topTextString = "All " +chosenWorkout.toLowerCase() + " workouts";
+                topTextString = "All " + chosenWorkout.toLowerCase() + " workouts";
                 topText.setText(topTextString);
                 workoutDates = dbHelper.getAllMuscleGroupWorkouts(chosenWorkout);
                 resultsLVadapter = new ArrayAdapter<>(WorkoutOverviewScreen.this, android.R.layout.simple_list_item_1, workoutDates);
@@ -101,8 +101,8 @@ public class WorkoutOverviewScreen extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        Intent intent = new Intent(view.getContext(), SelectionScreen.class);
-        finish();
+        Intent intent = new Intent(WorkoutOverviewScreen.this, SelectionScreen.class);
+        super.onBackPressed();
         startActivity(intent);
     }
 }

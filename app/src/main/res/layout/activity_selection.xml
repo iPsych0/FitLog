@@ -52,15 +52,14 @@
 
     <Button
         android:id="@+id/returnButton"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="148dp"
         android:layout_marginStart="148dp"
-        android:layout_marginTop="260dp"
         android:background="#990a1d"
-        android:text="Return home"
         android:onClick="goBack"
+        android:text="Return home"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

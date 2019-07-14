@@ -122,6 +122,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void editExercise(String oldName, String newName){
+        ContentValues content = new ContentValues();
+        content.put(COLUMN_EXERCISE, newName);
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(TABLE_MUSCLES, content, COLUMN_EXERCISE + "=?", new String[]{String.valueOf(oldName)});
+        db.close();
+    }
+
     public ArrayList<String> getExerciseList(String workout) {
         ArrayList<String> exerciseList = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();

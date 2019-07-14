@@ -12,6 +12,17 @@
     tools:context="com.example.daniel.fitlog.views.AddExercisesScreen">
 
     <Button
+        android:id="@+id/currentWorkoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/doneButton"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="#990a1d"
+        android:onClick="viewCurrentWorkout"
+        android:text="View current workout"
+        android:textColor="@android:color/white" />
+
+    <Button
         android:id="@+id/missingExerciseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,56 +95,6 @@
         android:text="ADD"
         android:textColor="@android:color/white" />
 
-    <RadioGroup
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/buttonGroup"
-        android:layout_centerInParent="false"
-        android:layout_below="@+id/addButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp">
-
-    <RadioButton
-        android:text="30"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button30" />
-
-    <RadioButton
-        android:text="60"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button60"
-        android:layout_marginStart="10dp" />
-
-    <RadioButton
-        android:text="90"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button90"
-        android:layout_marginStart="10dp" />
-    </RadioGroup>
-
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:srcCompat="@drawable/stopwatch"
-        android:id="@+id/stopWatch"
-        android:layout_below="@+id/buttonGroup"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/countdownTimer"
-        android:textSize="30sp"
-        android:forceHasOverlappingRendering="false"
-        android:textColor="#990a1d"
-        android:layout_below="@+id/buttonGroup"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
-
     <Button
         android:id="@+id/doneButton"
         android:layout_width="wrap_content"
@@ -144,5 +105,18 @@
         android:onClick="goBack"
         android:text="return home"
         android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/setsTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addButton"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calculateButton" />
 
 </RelativeLayout>

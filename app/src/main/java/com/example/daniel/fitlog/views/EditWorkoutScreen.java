@@ -160,8 +160,7 @@ public class EditWorkoutScreen extends AppCompatActivity {
         return layout;
     }
 
-    @Override
-    public void onBackPressed() {
+    public void goBack(View view) {
         Intent historyScreen = new Intent(EditWorkoutScreen.this, WorkoutHistoryScreen.class);
 
         Bundle bundle = new Bundle();
@@ -169,7 +168,7 @@ public class EditWorkoutScreen extends AppCompatActivity {
         bundle.putString("date", date);
         historyScreen.putExtras(bundle);
 
-        startActivity(historyScreen);
         super.onBackPressed();
+        startActivity(historyScreen);
     }
 }
