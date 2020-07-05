@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_add_exercises"
@@ -11,77 +11,70 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.daniel.fitlog.views.AddExercisesScreen">
 
-    <Button
-        android:id="@+id/currentWorkoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/doneButton"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="#990a1d"
-        android:onClick="viewCurrentWorkout"
-        android:text="View current workout"
-        android:textColor="@android:color/white" />
+    <Spinner
+        android:id="@+id/muscleGroups"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/exercises"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/muscleGroups"
+        android:layout_marginTop="8dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/muscleGroups" />
 
     <Button
         android:id="@+id/missingExerciseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="#990a1d"
         android:onClick="addMissingExercise"
         android:text="Add missing exercise"
-        android:textColor="@android:color/white" />
-
-    <Spinner
-        android:id="@+id/muscleGroups"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp" />
-
-    <Spinner
-        android:id="@+id/exercises"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_below="@+id/muscleGroups"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:spinnerMode="dropdown" />
-
-    <EditText
-        android:id="@+id/weight"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/dateButton"
-        android:layout_toEndOf="@+id/dateButton"
-        android:ems="10"
-        android:hint="@string/weight"
-        android:inputType="number"
-        android:textAlignment="center" />
-
-    <Button
-        android:id="@+id/dateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="159dp"
-        android:backgroundTint="#990a1d"
-        android:text="SELECT DATE"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exercises" />
 
     <EditText
         android:id="@+id/reps"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/weight"
-        android:layout_toStartOf="@+id/dateButton"
         android:ems="10"
         android:hint="@string/reps"
         android:inputType="number"
+        android:textAlignment="center"
+        app:layout_constraintRight_toLeftOf="@id/dateButton"
+        app:layout_constraintTop_toTopOf="@id/dateButton" />
+
+    <Button
+        android:id="@+id/dateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#990a1d"
+        android:text="SELECT DATE"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/missingExerciseButton" />
+
+    <EditText
+        android:id="@+id/weight"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/dateButton"
+        app:layout_constraintTop_toTopOf="@id/dateButton"
+        android:ems="10"
+        android:hint="@string/weight"
+        android:inputType="numberDecimal"
         android:textAlignment="center" />
 
 
@@ -89,34 +82,51 @@
         android:id="@+id/addButton"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#990a1d"
         android:onClick="addExercisesToDB"
         android:text="ADD"
-        android:textColor="@android:color/white" />
-
-    <Button
-        android:id="@+id/doneButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="#990a1d"
-        android:onClick="goBack"
-        android:text="return home"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateButton" />
 
     <TextView
         android:id="@+id/setsTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/addButton"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calculateButton" />
+        app:layout_constraintTop_toBottomOf="@+id/addButton" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/currentWorkoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#990a1d"
+        android:onClick="viewCurrentWorkout"
+        android:text="View current workout"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@id/doneButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/doneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#990a1d"
+        android:onClick="goBack"
+        android:text="return home"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
