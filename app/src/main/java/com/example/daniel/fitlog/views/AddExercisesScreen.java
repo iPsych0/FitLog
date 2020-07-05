@@ -76,6 +76,8 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
 
         listenForExerciseChanges();
 
+        updateCurrentSets();
+
         setsTV.setText(DEFAULT_SETS_MESSAGE + currentSets.toString());
 
     }

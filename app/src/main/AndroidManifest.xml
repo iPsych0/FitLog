@@ -19,14 +19,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.AddExercisesScreen" android:parentActivityName=".views.HomeScreen" />
-        <activity android:name=".views.HighestWeightHistoryScreen" android:parentActivityName=".views.SelectionScreen" />
-        <activity android:name=".views.HighestWeightGraphScreen" android:parentActivityName=".views.HighestWeightHistoryScreen"/>
-        <activity android:name=".views.SelectionScreen" android:parentActivityName=".views.HomeScreen"/>
-        <activity android:name=".views.WorkoutOverviewScreen" android:parentActivityName=".views.SelectionScreen" />
-        <activity android:name=".views.WorkoutHistoryScreen" android:parentActivityName=".views.WorkoutOverviewScreen"/>
-        <activity android:name=".views.EditWorkoutScreen" android:parentActivityName=".views.WorkoutHistoryScreen"/>
-        <activity android:name=".views.OneRepMaxScreen" android:parentActivityName=".views.HomeScreen"/>
+        <activity
+            android:name=".views.AddExercisesScreen"
+            android:parentActivityName=".views.HomeScreen" />
+        <activity
+            android:name=".views.HighestWeightHistoryScreen"
+            android:parentActivityName=".views.SelectionScreen" />
+        <activity
+            android:name=".views.HighestWeightGraphScreen"
+            android:parentActivityName=".views.HighestWeightHistoryScreen" />
+        <activity
+            android:name=".views.SelectionScreen"
+            android:parentActivityName=".views.HomeScreen" />
+        <activity
+            android:name=".views.WorkoutOverviewScreen"
+            android:parentActivityName=".views.SelectionScreen" />
+        <activity
+            android:name=".views.WorkoutHistoryScreen"
+            android:parentActivityName=".views.WorkoutOverviewScreen" />
+        <activity
+            android:name=".views.EditWorkoutScreen"
+            android:parentActivityName=".views.WorkoutHistoryScreen" />
+        <activity
+            android:name=".views.OneRepMaxScreen"
+            android:parentActivityName=".views.HomeScreen" />
+        <activity android:name=".views.WeightInputScreen"></activity>
     </application>
 
 </manifest>

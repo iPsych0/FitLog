@@ -66,4 +66,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workoutHistoryButton" />
 
+    <Button
+        android:id="@+id/weightButton"
+        android:layout_width="309dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="96dp"
+        android:background="#990a1d"
+        android:onClick="startWeightInput"
+        android:text="Weight tracker"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workoutHistoryButton" />
+
 </android.support.constraint.ConstraintLayout>

@@ -2,30 +2,26 @@ package com.example.daniel.fitlog.views;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.daniel.fitlog.utils.DBHelper;
 import com.example.daniel.fitlog.R;
+import com.example.daniel.fitlog.utils.DBHelper;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
-import com.jjoe64.graphview.series.Series;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.TreeMap;
 
 public class HighestWeightGraphScreen extends AppCompatActivity {
 
@@ -36,7 +32,7 @@ public class HighestWeightGraphScreen extends AppCompatActivity {
     private String chosenExercise;
     private TextView graphTitle;
     private DBHelper dbHelper;
-    private HashMap<Double, Date> weightMap = new HashMap<>();
+    private Map<Date, Double> weightMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +66,7 @@ public class HighestWeightGraphScreen extends AppCompatActivity {
 
     /**
      * Stylizes the graph
+     *
      * @param dates The list of dates to be stylized
      */
     private void stylizeGraph(List<Date> dates) {
@@ -122,7 +119,7 @@ public class HighestWeightGraphScreen extends AppCompatActivity {
 
         if (extrasReceived != null) {
             chosenExercise = extrasReceived.getString("chosenExercise");
-        }else{
+        } else {
             Toast.makeText(this, "Could not get the chosen exercise from the previous screen. Please retry.", Toast.LENGTH_LONG).show();
             return;
         }
@@ -134,28 +131,24 @@ public class HighestWeightGraphScreen extends AppCompatActivity {
 
     /**
      * Populates the graph with dates and weights from the database
+     *
      * @return A list of dates, to be used to format the graph
      */
     private List<Date> populateGraph() {
         weightMap = dbHelper.getWeightAndDateMap(chosenExercise);
 
-        Map result = weightMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-
         ArrayList<Double> weights = new ArrayList<>();
         ArrayList<Date> dates = new ArrayList<>();
-        for (Object o : result.keySet()) {
-            weights.add((Double) o);
+        for (Object o : weightMap.keySet()) {
+            dates.add((Date) o);
         }
-        for (int i = 0; i < weights.size(); i++) {
-            dates.add((Date) result.get(weights.get(i)));
+        for (int i = 0; i < dates.size(); i++) {
+            weights.add(weightMap.get(dates.get(i)));
         }
 
-        for (int i = 0; i < result.size(); i++) {
+        for (int i = 0; i < weightMap.size(); i++) {
             points.appendData(new DataPoint(dates.get(i), weights.get(i)), true,
-                    dbHelper.getDateListByExercise(chosenExercise).size());
+                    weightMap.size());
         }
 
         return dates;

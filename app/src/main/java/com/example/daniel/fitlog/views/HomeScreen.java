@@ -36,4 +36,9 @@ public class HomeScreen extends AppCompatActivity {
         Intent oneRepMaxScreen = new Intent(view.getContext(), OneRepMaxScreen.class);
         startActivity(oneRepMaxScreen);
     }
+
+    public void startWeightInput(View view) {
+        Intent weightInputScreen = new Intent(view.getContext(), WeightInputScreen.class);
+        startActivity(weightInputScreen);
+    }
 }

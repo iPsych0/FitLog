@@ -20,6 +20,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 /*
  * DBHelper is a manager file that contains functions for the databases used in the AddExercisesScreen
@@ -317,8 +319,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return weightList.get(weightList.size()-1);
     }
 
-    public HashMap<Double, Date> getWeightAndDateMap(String exercise) {
-        HashMap<Double, Date> weightList = new HashMap<>();
+    public Map<Date, Double> getWeightAndDateMap(String exercise) {
+        Map<Date, Double> weightList = new TreeMap<>(Date::compareTo);
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_MUSCLES + " WHERE exercise = '" + exercise + "'";
 
@@ -331,7 +333,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 DateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY);
                 // ids = 0, workout = 1, exercise = 2, reps = 3, weight = 4, date = 5
                 try {
-                    weightList.put(getHighestDailyWeight(exercise, dateString), format.parse(dateString));
+                    weightList.put(format.parse(dateString), getHighestDailyWeight(exercise, dateString));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

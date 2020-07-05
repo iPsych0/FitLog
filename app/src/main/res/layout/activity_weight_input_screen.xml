@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.WeightInputScreen"
+    android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Weight overview"
+            android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/weightInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Add weight in kg"
+        android:inputType="number"
+        android:paddingTop="24dp"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/addWeightButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:backgroundTint="#990a1d"
+        android:onClick="addWeight"
+        android:text="ADD"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/dateSelectButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="120dp"
+        android:backgroundTint="#990a1d"
+        android:onClick="addWeight"
+        android:textColor="@android:color/white" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/weightGraph"
+        android:layout_width="343dp"
+        android:layout_height="300dp"
+        android:layout_marginLeft="20dp" />
+
+    <Button
+        android:id="@+id/returnButton5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#990a1d"
+        android:onClick="goBackHome"
+        android:text="Return"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

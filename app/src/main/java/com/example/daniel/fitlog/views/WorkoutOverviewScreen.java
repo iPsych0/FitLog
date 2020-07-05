@@ -14,7 +14,6 @@ import com.example.daniel.fitlog.R;
 import com.example.daniel.fitlog.utils.DBHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class WorkoutOverviewScreen extends AppCompatActivity {
 
@@ -57,7 +56,7 @@ public class WorkoutOverviewScreen extends AppCompatActivity {
         }
 
 
-        topText = findViewById(R.id.topText);
+        topText = findViewById(R.id.title);
         topTextString = "All " +chosenWorkout.toLowerCase() + " workouts";
         scrollView = findViewById(R.id.workoutView);
 
