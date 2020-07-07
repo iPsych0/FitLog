@@ -21,6 +21,7 @@ import com.example.daniel.fitlog.com.example.daniel.fitlog.models.Set;
 import com.example.daniel.fitlog.utils.DBHelper;
 
 import java.util.List;
+import java.util.Locale;
 
 public class EditWorkoutScreen extends AppCompatActivity {
 
@@ -146,7 +147,7 @@ public class EditWorkoutScreen extends AppCompatActivity {
 
         weightField = new EditText(this);
         weightField.setHint("Weight:");
-        weightField.setText(String.valueOf(selected.getWeight()));
+        weightField.setText(formatDouble(selected.getWeight()));
         weightField.setInputType(InputType.TYPE_CLASS_NUMBER);
         weightField.setPadding(20, 20, 20, 20);
         weightField.setGravity(Gravity.CENTER);
@@ -158,6 +159,13 @@ public class EditWorkoutScreen extends AppCompatActivity {
         layout.addView(weightField, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         return layout;
+    }
+
+    private String formatDouble(double weight) {
+        if (weight == (long) weight) {
+            return String.format(Locale.ENGLISH, "%d", (long) weight);
+        }
+        return String.format(Locale.ENGLISH, "%s", weight);
     }
 
     public void goBack(View view) {

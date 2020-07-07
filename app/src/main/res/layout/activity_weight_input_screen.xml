@@ -9,21 +9,21 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
+        android:layout_marginTop="16dp"
         android:text="Weight Tracker"
         android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/weightInput"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
@@ -36,9 +36,9 @@
 
     <Button
         android:id="@+id/addWeightButton"
-        android:layout_width="match_parent"
+        android:layout_width="144dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#990a1d"
         android:onClick="addWeight"
         android:text="ADD"
@@ -49,9 +49,9 @@
 
     <Button
         android:id="@+id/dateSelectButton"
-        android:layout_width="150dp"
+        android:layout_width="144dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#990a1d"
         android:onClick="addWeight"
         android:textColor="@android:color/white"
@@ -61,18 +61,22 @@
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/weightGraph"
-        android:layout_width="343dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/returnButton5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dateSelectButton" />
 
     <Button
         android:id="@+id/returnButton5"
-        android:layout_width="match_parent"
+        android:layout_width="192dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#990a1d"
         android:onClick="goBackHome"
         android:text="Return"

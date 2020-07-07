@@ -21,29 +21,39 @@
         </activity>
         <activity
             android:name=".views.AddExercisesScreen"
-            android:parentActivityName=".views.HomeScreen" />
+            android:parentActivityName=".views.HomeScreen"
+            android:label="Add sets to your workout"/>
         <activity
             android:name=".views.HighestWeightHistoryScreen"
-            android:parentActivityName=".views.SelectionScreen" />
+            android:parentActivityName=".views.SelectionScreen"
+            android:label="Select an exercise to track"/>
         <activity
             android:name=".views.HighestWeightGraphScreen"
-            android:parentActivityName=".views.HighestWeightHistoryScreen" />
+            android:parentActivityName=".views.HighestWeightHistoryScreen"
+            android:label="Highest weight for this exercise per date"/>
         <activity
             android:name=".views.SelectionScreen"
-            android:parentActivityName=".views.HomeScreen" />
+            android:parentActivityName=".views.HomeScreen"
+            android:label="Choose a metric to view"/>
         <activity
             android:name=".views.WorkoutOverviewScreen"
-            android:parentActivityName=".views.SelectionScreen" />
+            android:parentActivityName=".views.SelectionScreen"
+            android:label="Choose a workout"/>
         <activity
             android:name=".views.WorkoutHistoryScreen"
-            android:parentActivityName=".views.WorkoutOverviewScreen" />
+            android:parentActivityName=".views.WorkoutOverviewScreen"
+            android:label="Overview of sets"/>
         <activity
             android:name=".views.EditWorkoutScreen"
-            android:parentActivityName=".views.WorkoutHistoryScreen" />
+            android:parentActivityName=".views.WorkoutHistoryScreen"
+            android:label="Edit your workout"/>
         <activity
             android:name=".views.OneRepMaxScreen"
-            android:parentActivityName=".views.HomeScreen" />
-        <activity android:name=".views.WeightInputScreen"></activity>
+            android:parentActivityName=".views.HomeScreen"
+            android:label="Calculate your 1-Rep Max"/>
+        <activity android:name=".views.WeightInputScreen"
+            android:parentActivityName=".views.HomeScreen"
+            android:label="Track your weight over time"/>
     </application>
 
 </manifest>

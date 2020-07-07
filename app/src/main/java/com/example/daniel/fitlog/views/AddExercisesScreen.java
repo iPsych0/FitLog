@@ -37,6 +37,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AddExercisesScreen extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -109,7 +110,7 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
                     updateCurrentSets();
 
                     Toast.makeText(AddExercisesScreen.this, "You did " + reps.getText().toString() + " reps of " +
-                            weight.getText().toString() + "kg of " + exercises.getSelectedItem().toString() + "s", Toast.LENGTH_LONG).show();
+                            weight.getText().toString() + "kg of " + exercises.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
                 })
 
                 // Nothing is done when "No" is pressed
@@ -120,10 +121,17 @@ public class AddExercisesScreen extends AppCompatActivity implements DatePickerD
     private void updateCurrentSets() {
         List<Set> sets = dbHelper.getAllSetsByWorkoutAndDateAndExercise(muscleGroupSelected, selectedDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")), exerciseSelected);
         currentSets.delete(0, currentSets.length());
-        for(Set s : sets){
-            currentSets.append(s.getReps()).append("x ").append(s.getWeight()).append("kg\n");
+        for (Set s : sets) {
+            currentSets.append(s.getReps()).append("x ").append(formatDouble(s.getWeight())).append("kg\n");
         }
         setsTV.setText(DEFAULT_SETS_MESSAGE + currentSets.toString());
+    }
+
+    private String formatDouble(double weight) {
+        if (weight == (long) weight) {
+            return String.format(Locale.ENGLISH, "%d", (long) weight);
+        }
+        return String.format(Locale.ENGLISH, "%s", weight);
     }
 
     /**

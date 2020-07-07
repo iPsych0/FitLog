@@ -163,7 +163,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // Move cursor over the query
         if (c.moveToFirst()){
             do{
-                Set set = new Set(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3), c.getInt(4), c.getString(5));
+                Set set = new Set(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3), c.getDouble(4), c.getString(5));
                 setList.add(set);
                 // ids = 0, workout = 1, exercise = 2, reps = 3, weight = 4, date = 5
             } while (c.moveToNext());
@@ -185,7 +185,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // Move cursor over the query
         if (c.moveToFirst()){
             do{
-                Set set = new Set(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3), c.getInt(4), c.getString(5));
+                Set set = new Set(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3), c.getDouble(4), c.getString(5));
                 setList.add(set);
                 // ids = 0, workout = 1, exercise = 2, reps = 3, weight = 4, date = 5
             } while (c.moveToNext());

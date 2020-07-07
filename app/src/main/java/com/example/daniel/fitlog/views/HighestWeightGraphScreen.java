@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -152,5 +153,11 @@ public class HighestWeightGraphScreen extends AppCompatActivity {
         }
 
         return dates;
+    }
+
+    public void goBack(View view) {
+        Intent workoutHistory = new Intent(HighestWeightGraphScreen.this, HighestWeightHistoryScreen.class);
+        startActivity(workoutHistory);
+        finish();
     }
 }

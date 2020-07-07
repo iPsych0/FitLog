@@ -1,11 +1,14 @@
 package com.example.daniel.fitlog.com.example.daniel.fitlog.models;
 
+import java.util.Locale;
+
 public class Set {
 
     private String muscleGroup, exercise, date;
-    private int id, reps, weight;
+    private int id, reps;
+    private double weight;
 
-    public Set(int id, String muscleGroup, String exercise, int reps, int weight, String date) {
+    public Set(int id, String muscleGroup, String exercise, int reps, double weight, String date) {
         this.id = id;
         this.muscleGroup = muscleGroup;
         this.exercise = exercise;
@@ -46,11 +49,11 @@ public class Set {
         this.reps = reps;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
@@ -64,7 +67,14 @@ public class Set {
 
     @Override
     public String toString(){
-        return reps + "x " + weight + "kg";
+        return reps + "x " + formatDouble(weight) + "kg";
+    }
+
+    private String formatDouble(double weight) {
+        if (weight == (long) weight) {
+            return String.format(Locale.ENGLISH, "%d", (long) weight);
+        }
+        return String.format(Locale.ENGLISH, "%s", weight);
     }
 
 }

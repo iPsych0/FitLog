@@ -5,16 +5,13 @@
     android:id="@+id/activity_add_exercises"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.daniel.fitlog.views.AddExercisesScreen">
 
     <Spinner
         android:id="@+id/muscleGroups"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/muscleGroups"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +29,7 @@
 
     <Button
         android:id="@+id/missingExerciseButton"
-        android:layout_width="wrap_content"
+        android:layout_width="192dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:backgroundTint="#990a1d"
@@ -47,16 +44,17 @@
         android:id="@+id/reps"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
         android:ems="10"
         android:hint="@string/reps"
         android:inputType="number"
         android:textAlignment="center"
-        app:layout_constraintRight_toLeftOf="@id/dateButton"
-        app:layout_constraintTop_toTopOf="@id/dateButton" />
+        app:layout_constraintBottom_toBottomOf="@id/dateButton"
+        app:layout_constraintRight_toLeftOf="@id/dateButton" />
 
     <Button
         android:id="@+id/dateButton"
-        android:layout_width="wrap_content"
+        android:layout_width="144dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="#990a1d"
@@ -70,17 +68,18 @@
         android:id="@+id/weight"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/dateButton"
-        app:layout_constraintTop_toTopOf="@id/dateButton"
+        android:layout_marginLeft="16dp"
         android:ems="10"
         android:hint="@string/weight"
         android:inputType="numberDecimal"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@id/dateButton"
+        app:layout_constraintLeft_toRightOf="@id/dateButton" />
 
 
     <Button
         android:id="@+id/addButton"
-        android:layout_width="90dp"
+        android:layout_width="144dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="#990a1d"
@@ -105,9 +104,9 @@
 
     <Button
         android:id="@+id/currentWorkoutButton"
-        android:layout_width="wrap_content"
+        android:layout_width="192dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#990a1d"
         android:onClick="viewCurrentWorkout"
         android:text="View current workout"
@@ -118,9 +117,9 @@
 
     <Button
         android:id="@+id/doneButton"
-        android:layout_width="wrap_content"
+        android:layout_width="192dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#990a1d"
         android:onClick="goBack"
         android:text="return home"

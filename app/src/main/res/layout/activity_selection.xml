@@ -10,11 +10,10 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Select a metric you wish to see"
         android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,10 +21,8 @@
 
     <Button
         android:id="@+id/highestWeightsButton"
-        android:layout_width="309dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:background="#990a1d"
         android:onClick="startMaxWeights"
@@ -37,11 +34,9 @@
 
     <Button
         android:id="@+id/workoutHistoryButton"
-        android:layout_width="309dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:background="#990a1d"
         android:onClick="startSelectMuscleGroup"
         android:text="Workout history"
@@ -52,11 +47,9 @@
 
     <Button
         android:id="@+id/returnButton"
-        android:layout_width="120dp"
+        android:layout_width="192dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginStart="148dp"
         android:background="#990a1d"
         android:onClick="goBack"
         android:text="Return home"
