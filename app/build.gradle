@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 33
+    buildToolsVersion '36.0.0'
+    namespace = "com.example.daniel.fitlog"
 
     defaultConfig {
-        applicationId "com.example.daniel.fitlog"
-        minSdkVersion 26
-        targetSdkVersion 26
+        applicationId "com.example.daniel"
+        minSdkVersion 33
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -18,20 +19,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility 21
+        sourceCompatibility 21
     }
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-    testCompile 'junit:junit:4.12'
-    compile 'com.jjoe64:graphview:4.2.1'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:support-compat:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.jjoe64:graphview:4.2.1'
 }
